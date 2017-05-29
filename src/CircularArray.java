@@ -86,7 +86,7 @@ public class CircularArray<T> implements Iterator<T>{
 		/*
 		 * output : 
 		 * 2 3 4 5 
-		   3 4 5 2 
+		   3 4 5 2  	
            5 2 3 4 
 		 */
 		
