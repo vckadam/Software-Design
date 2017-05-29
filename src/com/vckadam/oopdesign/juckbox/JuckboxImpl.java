@@ -27,25 +27,37 @@ public class JuckboxImpl implements Juckbox {
 
 	@Override
 	public void playSingleSong(Song song) {
-		// TODO Auto-generated method stub
+		System.out.println(song.getSongTitle());
 
 	}
 
 	@Override
 	public void addToQueue(Song song) {
-		// TODO Auto-generated method stub
+		this.queue.add(song);
 
 	}
 
 	@Override
 	public void palyFromQueue() {
-		// TODO Auto-generated method stub
-
+		this.stop = false;
+		while(!this.stop && !queue.isEmpty()) {
+			System.out.println(queue.remove().getSongTitle());
+		}
 	}
 
 	@Override
 	public void playPlaylist(PlayList playList, PickType pType) {
-		// TODO Auto-generated method stub
+		if(pType == PickType.QUEUE) {
+			for(Song song : playList.getSongs()) {
+				System.out.println(song.getSongTitle());
+			}
+		} else if (pType == PickType.RANDOM) {
+			// write code for this
+		} else {
+			for(int i = playList.getSongs().size()-1; i >= 0; i--) {
+				System.out.println(playList.getSongs().get(i).getSongTitle());
+			}
+		}
 		
 	}
 	@Override
