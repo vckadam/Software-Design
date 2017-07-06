@@ -107,6 +107,16 @@ public class OperationTest {
 		return emps;
 	}
 	
+	public List<Employee> prepareEmployeeList4() {
+		List<Employee> emps = new ArrayList<Employee>();
+		Employee emp1 = new Employee(5, "Jo", 70000, 1);
+		Employee emp2 = new Employee(6, "Hen", 80000, 2);
+		Employee emp3 = new Employee(7, "Samir", 60000, 2);
+		Employee emp4 = new Employee(8, "Min", 90000, null);
+		emps.add(emp1); emps.add(emp2); emps.add(emp3); emps.add(emp4);
+		return emps;
+	}
+	
 	public List<Department> prepareDeptList3() {
 		List<Department> depts = new ArrayList<Department>();
 		Department dept1 = new Department(3, "IT");
@@ -114,4 +124,29 @@ public class OperationTest {
 		depts.add(dept1); depts.add(dept2);
 		return depts;
 	}
+	
+	/** If nth highest salary employee exist.*/
+	@Test
+	public void getNthHighestSalaryEmployeeTest() {
+		List<Employee> emps = prepareEmployeeList();
+		Operation op = new Operation();
+		Employee expected = emps.get(3);
+		Employee actual = op.getNthHighestSalaryEmployee(1, emps);
+		assertEquals(expected, actual);		
+	}
+	
+	/** Employee list contains null as well as duplicate salary values. */
+	@Test
+	public void getNthHighestSalaryEmployeeTest2() {
+		List<Employee> emps = this.prepareEmployeeList();
+		emps.add(null);
+		emps.add(null);
+		List<Employee> emps2 = this.prepareEmployeeList4();
+		emps.addAll(emps2);
+		Operation op = new Operation();
+		Employee expected = emps2.get(1);
+		Employee actual = op.getNthHighestSalaryEmployee(4, emps);
+		assertEquals(expected, actual);		
+	}
+	
 }

@@ -1,6 +1,7 @@
 package com.vckadam.oopdesign.EmployeeEarning;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +54,20 @@ public class Operation {
 			}
 		}
 		return maxPaidEmpList;
+	}
+	
+	public Employee getNthHighestSalaryEmployee(final int n, final List<Employee> emps) {
+		if(n <= 0 || emps == null || n > emps.size()) return null;
+		Comparator<Employee> comp = new Comparator<Employee>() {
+			public int compare(Employee e1, Employee e2){
+				if(e1 == null) return 1;
+				if(e2 == null) return -1;
+				return e2.getSalary() - e1.getSalary();
+			}
+		};
+		List<Employee> empTemp = new ArrayList<Employee>(emps);
+		Collections.sort(empTemp, comp);
+		return empTemp.get(n-1);
 	}
 					
 }
