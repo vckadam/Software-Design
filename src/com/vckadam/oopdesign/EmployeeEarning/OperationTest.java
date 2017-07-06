@@ -1,4 +1,4 @@
-package EmployeeEarning;
+package com.vckadam.oopdesign.EmployeeEarning;
 
 import static org.junit.Assert.assertEquals;
 

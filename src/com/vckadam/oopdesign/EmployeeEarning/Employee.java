@@ -1,4 +1,4 @@
-package EmployeeEarning;
+package com.vckadam.oopdesign.EmployeeEarning;
 
 public class Employee {
 	private final int id;

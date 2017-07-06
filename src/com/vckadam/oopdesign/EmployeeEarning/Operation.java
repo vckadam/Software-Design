@@ -1,4 +1,4 @@
-package EmployeeEarning;
+package com.vckadam.oopdesign.EmployeeEarning;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -8,12 +8,15 @@ import java.util.Map;
 import java.util.PriorityQueue;
 
 public class Operation {
+	
 	private Map<Integer,PriorityQueue<Employee>> mostPaidEmployeeMap;
 	private Map<Integer,Department> deptMap;
+	
 	public Operation() {
 		this.mostPaidEmployeeMap = new HashMap<Integer,PriorityQueue<Employee>>();
 		this.deptMap = new HashMap<Integer,Department>();
 	}
+	
 	public List<MaxPaidEmployee> getMaxPaidEmployee(List<Employee> emps, List<Department> depts) {
 		List<MaxPaidEmployee> maxPaidEmpList = new ArrayList<MaxPaidEmployee>();
 		if(emps == null || emps.size() == 0
