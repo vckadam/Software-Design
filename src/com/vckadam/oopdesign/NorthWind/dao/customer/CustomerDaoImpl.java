@@ -7,7 +7,9 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vckadam.oopdesign.NorthWind.model.Customer;
 import com.vckadam.oopdesign.NorthWind.model.Order;
@@ -15,6 +17,7 @@ import com.vckadam.oopdesign.NorthWind.model.Order;
 public class CustomerDaoImpl implements CustomerDao {
 
 	List<Customer> customerList;
+	Map<String,Customer> customerMap;
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\NorthWind\\dao\\customer\\customertext";
 	
 	public CustomerDaoImpl() throws IOException {
@@ -58,5 +61,20 @@ public class CustomerDaoImpl implements CustomerDao {
 	    for(Customer cust: this.customerList) {
 	    	System.out.println(cust.toString());
 	    }
+	}
+	
+	@Override
+	public Map<String, Customer> getCustomerMap() {
+		if(this.customerMap == null) loadMap();
+		return this.customerMap;
+	}
+	
+	private void loadMap() {
+		this.customerMap = new HashMap<String, Customer>();
+		for(Customer cust : this.customerList) {
+			if(!this.customerMap.containsKey(cust.getCustomerId())){
+				this.customerMap.put(cust.getCustomerId(), cust);
+			}
+		}
 	}
 }

@@ -12,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.vckadam.oopdesign.NorthWind.dao.customer.CustomerDao;
+import com.vckadam.oopdesign.NorthWind.dao.customer.CustomerDaoImpl;
+import com.vckadam.oopdesign.NorthWind.model.Customer;
 import com.vckadam.oopdesign.NorthWind.model.Order;
 
 public class OrderDaoImpl implements OrderDao{
@@ -25,13 +28,20 @@ public class OrderDaoImpl implements OrderDao{
 		loadList();
 	}
 	@Override
-	public List<String> companyPacedOrderIn(int year) {
+	public List<String> companyPacedOrderIn(int year) throws IOException {
 		if(ordersInyear == null) populateMap();
 		List<String> ret = new ArrayList<String>();
 		List<Order> orders = ordersInyear.get(year);
 		if(orders == null) return ret;
-		//for(Order order : orders) ret.add(order.get)
-		return null;
+		CustomerDao customerDao = new CustomerDaoImpl();
+		Map<String,Customer> customerMap = customerDao.getCustomerMap();
+		for(Order order : orders) {
+			String key = order.getCustomerId();
+			if(customerMap.containsKey(key)) {
+				ret.add(customerMap.get(key).getCompanyName());
+			}
+		}
+		return ret;
 	}
 	public void populateMap() {
 		ordersInyear = new HashMap<Integer,List<Order>>();
