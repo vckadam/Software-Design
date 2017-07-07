@@ -1,11 +1,11 @@
 package com.vckadam.oopdesign.NorthWind.model;
 
 public class Customer {
-	private final int customerId;
+	private final String customerId;
 	private String companyName, contactName, contactTitle,
 	               address, city, region, postalCode, country,
 	               phone, fax;
-	public Customer(int customerId, String companyName, String contactName, String contactTitle, String address,
+	public Customer(String customerId, String companyName, String contactName, String contactTitle, String address,
 			String city, String region, String postalCode, String country, String phone, String fax) {
 		super();
 		this.customerId = customerId;
@@ -80,8 +80,13 @@ public class Customer {
 	public void setFax(String fax) {
 		this.fax = fax;
 	}
-	public int getCustomerId() {
+	public String getCustomerId() {
 		return customerId;
+	}
+	public String toString() {
+		return this.customerId+" "+this.companyName+" "+this.contactName+" "+
+	    this.contactTitle+" "+this.address+" "+this.city+" "+this.region+" "+
+		this.postalCode+" "+this.country+" "+this.phone+" "+this.fax;
 	}
 	
 }
