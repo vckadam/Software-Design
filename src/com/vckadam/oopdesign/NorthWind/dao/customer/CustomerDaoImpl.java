@@ -58,9 +58,9 @@ public class CustomerDaoImpl implements CustomerDao {
 	    			strA[10].equals("NULL")?null:strA[10].substring(1,strA[10].length()-1));
 	    	this.customerList.add(customer);
 	    }
-	    for(Customer cust: this.customerList) {
+	    /*for(Customer cust: this.customerList) {
 	    	System.out.println(cust.toString());
-	    }
+	    }*/
 	}
 	
 	@Override

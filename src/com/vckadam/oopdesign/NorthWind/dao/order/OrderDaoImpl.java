@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -25,16 +26,19 @@ public class OrderDaoImpl implements OrderDao{
 	
 	public OrderDaoImpl() throws IOException, NumberFormatException, ParseException {
 		this.orderList = new ArrayList<Order>();
+		this.ordersInyear = new HashMap<Integer,List<Order>>();
 		loadList();
+		populateMap();
 	}
 	@Override
 	public List<String> companyPacedOrderIn(int year) throws IOException {
-		if(ordersInyear == null) populateMap();
 		List<String> ret = new ArrayList<String>();
 		List<Order> orders = ordersInyear.get(year);
+		//System.out.println(orders.toString());
 		if(orders == null) return ret;
 		CustomerDao customerDao = new CustomerDaoImpl();
 		Map<String,Customer> customerMap = customerDao.getCustomerMap();
+		//System.out.println(customerMap.toString());
 		for(Order order : orders) {
 			String key = order.getCustomerId();
 			if(customerMap.containsKey(key)) {
@@ -44,9 +48,11 @@ public class OrderDaoImpl implements OrderDao{
 		return ret;
 	}
 	public void populateMap() {
-		ordersInyear = new HashMap<Integer,List<Order>>();
+		Calendar ca = Calendar.getInstance();
 		for(Order order : orderList) {
-			int key = order.getOrderDate().getYear();
+			ca.setTime(order.getOrderDate());
+			int key = ca.get(Calendar.YEAR);
+			//System.out.println(key);
 			if(!ordersInyear.containsKey(key)) {
 				ordersInyear.put(key, new ArrayList<Order>());
 			}
@@ -68,7 +74,7 @@ public class OrderDaoImpl implements OrderDao{
 	    }
 	    for(String line : lines) {
 	    	String[] strA = line.split(", ");
-	    	System.out.println(Arrays.toString(strA));
+	    	//System.out.println(Arrays.toString(strA));
 	    	Order order = new Order(
 	    			Integer.valueOf(strA[0]),
 	    			strA[1].substring(1,strA[1].length()-1),
@@ -87,9 +93,9 @@ public class OrderDaoImpl implements OrderDao{
 	    			);
 	    	this.orderList.add(order);
 	    }
-	    for(Order or: orderList) {
+	    /*for(Order or: orderList) {
 	    	System.out.println(or.toString());
-	    }
+	    }*/
 	}
 
 }
