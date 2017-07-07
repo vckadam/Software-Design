@@ -6,19 +6,28 @@ public class Order {
 	private final int orderId;
 	private int employeeId, shipVia;
 	private double freight;
-	private String customerId, shipName, shitAddress, shipCity, shitRegion,
+	private String customerId, shipName, shipAddress, shipCity, shipRegion,
 	               shipPostalCode, shipCountry;
 	private Date orderDate, requiredDate, shippedDate;
-	public Order(final int orderId, 
-			      final int employeeId, final int shipVia, 
-			      final String customerId, final Date orderDate,
-			      final Date requiredDate) {
+	
+	public Order(int orderId, String customerId, int employeeId, Date orderDate,  Date requiredDate, Date shippedDate,
+			int shipVia, double freight, String shipName,
+			String shipAddress, String shipCity, String shipRegion, String shipPostalCode, String shipCountry) {
+		super();
 		this.orderId = orderId;
-		this.customerId = customerId;
 		this.employeeId = employeeId;
 		this.shipVia = shipVia;
+		this.freight = freight;
+		this.customerId = customerId;
+		this.shipName = shipName;
+		this.shipAddress = shipAddress;
+		this.shipCity = shipCity;
+		this.shipRegion = shipRegion;
+		this.shipPostalCode = shipPostalCode;
+		this.shipCountry = shipCountry;
 		this.orderDate = orderDate;
 		this.requiredDate = requiredDate;
+		this.shippedDate = shippedDate;
 	}
 	public int getEmployeeId() {
 		return employeeId;
@@ -50,11 +59,11 @@ public class Order {
 	public void setShipName(String shipName) {
 		this.shipName = shipName;
 	}
-	public String getShitAddress() {
-		return shitAddress;
+	public String getshipAddress() {
+		return shipAddress;
 	}
-	public void setShitAddress(String shitAddress) {
-		this.shitAddress = shitAddress;
+	public void setshipAddress(String shipAddress) {
+		this.shipAddress = shipAddress;
 	}
 	public String getShipCity() {
 		return shipCity;
@@ -62,11 +71,11 @@ public class Order {
 	public void setShipCity(String shipCity) {
 		this.shipCity = shipCity;
 	}
-	public String getShitRegion() {
-		return shitRegion;
+	public String getshipRegion() {
+		return shipRegion;
 	}
-	public void setShitRegion(String shitRegion) {
-		this.shitRegion = shitRegion;
+	public void setshipRegion(String shipRegion) {
+		this.shipRegion = shipRegion;
 	}
 	public String getShipPostalCode() {
 		return shipPostalCode;
@@ -100,6 +109,13 @@ public class Order {
 	}
 	public int getOrderId() {
 		return orderId;
+	}
+	public String toString() {
+		return this.orderId+" "+this.customerId+" "+this.employeeId+" "+this.orderDate+
+				" "+this.requiredDate+" "+this.shippedDate+" "+this.shipVia+" "+
+				this.freight+" "+this.shipName+" "+this.shipAddress+" "+
+				this.shipCity+" "+this.shipRegion+" "+this.shipPostalCode+" "+
+				this.shipCountry;
 	}
 	
 }
