@@ -1,13 +1,14 @@
 package com.vckadam.oopdesign.NorthWind.model;
 
-public class Products {
+public class Product {
 	private final int productId;
 	private int supplierId, categoryId, unitsInStock, unitsOnOrder, reorderLevel;
 	private String productName, quantityPerUnit;
 	private double unitPrice;
 	private boolean discontinued;
-	public Products(int productId, int supplierId, int categoryId, int unitsInStock, int unitsOnOrder, int reorderLevel,
-			String productName, String quantityPerUnit, double unitPrice, boolean discontinued) {
+	public Product(int productId, String productName, int supplierId, int categoryId, String quantityPerUnit, 
+			double unitPrice, int unitsInStock, int unitsOnOrder, int reorderLevel,
+			   boolean discontinued) {
 		super();
 		this.productId = productId;
 		this.supplierId = supplierId;
@@ -77,5 +78,9 @@ public class Products {
 	public int getProductId() {
 		return productId;
 	}
-	
+	public String toString() {
+		return this.productId+" "+this.productName+" "+this.supplierId+" "+this.categoryId+" "+
+	    this.quantityPerUnit+" "+this.unitPrice+" "+this.unitsInStock+" "+
+	    this.unitsOnOrder+" "+this.reorderLevel+" "+this.discontinued;
+	}
 }
