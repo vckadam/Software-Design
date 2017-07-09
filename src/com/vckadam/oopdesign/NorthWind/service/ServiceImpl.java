@@ -13,7 +13,6 @@ import com.vckadam.oopdesign.NorthWind.dao.product.ProductDaoImpl;
 import com.vckadam.oopdesign.NorthWind.dao.supplier.SupplierDao;
 import com.vckadam.oopdesign.NorthWind.dao.supplier.SupplierDaoImpl;
 import com.vckadam.oopdesign.NorthWind.model.Category;
-import com.vckadam.oopdesign.NorthWind.model.Customer;
 import com.vckadam.oopdesign.NorthWind.model.Product;
 import com.vckadam.oopdesign.NorthWind.model.Supplier;
 

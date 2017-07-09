@@ -58,9 +58,9 @@ public class ProductDaoImpl implements ProductDao {
 	    			!(strA[9].substring(2,strA[9].length()-1).equals("0")));
 	    	this.productList.add(product);
 	    }
-	    for(Product or: this.productList) {
+	    /*for(Product or: this.productList) {
 	    	System.out.println(or.toString());
-	    }
+	    }*/
 	}
 	
 	private void loadMap() {
