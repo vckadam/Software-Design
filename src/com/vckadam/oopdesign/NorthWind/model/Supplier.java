@@ -82,5 +82,10 @@ public class Supplier {
 	public int getSupplierId() {
 		return supplierId;
 	}
+	public String toString() {
+		return this.supplierId+" "+this.companyName+" "+this.contactName+" "+
+	    this.contactTitle+" "+this.address+" "+this.city+" "+this.region+" "+
+		this.postalCode+" "+this.country+" "+this.phone+" "+this.fax;
+	}
 	
 }
