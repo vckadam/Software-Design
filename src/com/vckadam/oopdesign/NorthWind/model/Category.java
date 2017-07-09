@@ -24,5 +24,8 @@ public class Category {
 	public int getCategoryId() {
 		return categoryId;
 	}
+	public String toString() {
+		return this.categoryId+" "+this.categoryName+" "+this.description;
+	}
 	
 }
