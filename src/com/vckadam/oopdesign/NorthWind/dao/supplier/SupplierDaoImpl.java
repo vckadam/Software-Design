@@ -6,17 +6,21 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vckadam.oopdesign.NorthWind.model.Supplier;
 
 public class SupplierDaoImpl implements SupplierDao {
 	
 	private List<Supplier> supplierList;
+	private Map<Integer,Supplier> supplierMap;
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\NorthWind\\dao\\supplier\\suppliertext";
 	
 	public SupplierDaoImpl() throws IOException {
 		this.supplierList = new ArrayList<Supplier>();
+		this.supplierMap = new HashMap<Integer, Supplier>();
 		loadSuppliers();
 	}
 	
@@ -34,7 +38,7 @@ public class SupplierDaoImpl implements SupplierDao {
 	    }
 	    for(String line : lines) {
 	    	String[] strA = line.split(", ");
-	    	Supplier order = new Supplier(
+	    	Supplier supplier = new Supplier(
 	    			Integer.valueOf(strA[0]),
 	    			strA[1].substring(1,strA[1].length()-1),
 	    			strA[2].substring(1,strA[2].length()-1),
@@ -47,7 +51,8 @@ public class SupplierDaoImpl implements SupplierDao {
 	    			strA[9].substring(1,strA[9].length()-1),
 	    			strA[10].equals("NULL")?null:strA[10].substring(1,strA[10].length()-1)
 	    			);
-	    	this.supplierList.add(order);
+	    	this.supplierList.add(supplier);
+	    	this.supplierMap.put(supplier.getSupplierId(), supplier);
 	    }
 	    /*for(Supplier sup: this.supplierList) {
     	System.out.println(sup.toString());
@@ -78,5 +83,11 @@ public class SupplierDaoImpl implements SupplierDao {
 	@Override
 	public List<Supplier> getSupplierList() {
 		return this.supplierList;
+	}
+
+	@Override
+	public Supplier getSupplierById(Integer supplierId) {
+		if(!this.supplierMap.containsKey(supplierId)) return null;
+		return this.supplierMap.get(supplierId);
 	}
 }
