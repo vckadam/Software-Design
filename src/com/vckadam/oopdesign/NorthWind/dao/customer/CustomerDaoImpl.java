@@ -1,18 +1,18 @@
 package com.vckadam.oopdesign.NorthWind.dao.customer;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
+
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
+
 import java.util.ArrayList;
-import java.util.Arrays;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.vckadam.oopdesign.NorthWind.model.Customer;
-import com.vckadam.oopdesign.NorthWind.model.Order;
+
 
 public class CustomerDaoImpl implements CustomerDao {
 
@@ -32,7 +32,6 @@ public class CustomerDaoImpl implements CustomerDao {
 	private void loadList() throws IOException {
 		List<String> lines = new ArrayList<String>();
 	    BufferedReader reader = null;
-	    SimpleDateFormat parser=new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 	    try {
 	        reader = new BufferedReader(new FileReader(FILENAME));
 	        String line = null;

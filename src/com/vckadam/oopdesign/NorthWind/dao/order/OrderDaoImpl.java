@@ -6,9 +6,9 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -96,6 +96,24 @@ public class OrderDaoImpl implements OrderDao{
 	    /*for(Order or: orderList) {
 	    	System.out.println(or.toString());
 	    }*/
+	}
+	@Override
+	public List<Order> sortFromExpensiveToCheapest() {
+		List<Order> ret = new ArrayList<Order>(this.orderList);
+		Comparator<Order> comp = new Comparator<Order>() {
+			public int compare(Order or1, Order or2) {
+				double freight1 = or1.getFreight();
+				double freight2 = or2.getFreight();
+				if(freight1 >= freight2) return -1;
+				else return 1;
+			}
+		};
+		Collections.sort(ret, comp);
+		return ret;
+	}
+	@Override
+	public List<Order> getOrderList() {
+		return this.orderList;
 	}
 
 }
