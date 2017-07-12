@@ -8,7 +8,10 @@ import java.util.Map;
 
 import com.vckadam.oopdesign.NorthWind.dao.product.ProductDao;
 import com.vckadam.oopdesign.NorthWind.dao.product.ProductDaoImpl;
+import com.vckadam.oopdesign.NorthWind.dao.supplier.SupplierDao;
+import com.vckadam.oopdesign.NorthWind.dao.supplier.SupplierDaoImpl;
 import com.vckadam.oopdesign.NorthWind.model.Product;
+import com.vckadam.oopdesign.NorthWind.model.ProductsBySupplier;
 import com.vckadam.oopdesign.NorthWind.model.Supplier;
 
 public class ProductsBySupplierDaoImpl implements ProductsBySupplierDao{
@@ -38,6 +41,19 @@ public class ProductsBySupplierDaoImpl implements ProductsBySupplierDao{
 			this.productMap.get(supplierId).add(product);
 		}
 		
+	}
+
+	@Override
+	public List<ProductsBySupplier> getAllSupplierProdcts() throws IOException {
+		List<ProductsBySupplier> ret = new ArrayList<ProductsBySupplier>();
+		SupplierDao supplierDao = new SupplierDaoImpl();
+		for(Integer supplierId : this.productMap.keySet()) {
+			Supplier supplier = supplierDao.getSupplierById(supplierId);
+			ProductsBySupplier productBySupplier = new ProductsBySupplier(supplier,
+					this.productMap.get(supplierId));
+		    ret.add(productBySupplier);	
+		}
+		return ret;
 	}
 
 }
