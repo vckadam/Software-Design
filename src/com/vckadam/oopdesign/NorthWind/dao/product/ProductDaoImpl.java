@@ -71,4 +71,8 @@ public class ProductDaoImpl implements ProductDao {
 			this.productCatMap.get(key).add(product);
 		}
 	}
+	
+	public List<Product> getAllProducts() {
+		return this.productList;
+	}
 }

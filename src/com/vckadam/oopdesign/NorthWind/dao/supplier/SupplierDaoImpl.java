@@ -53,6 +53,7 @@ public class SupplierDaoImpl implements SupplierDao {
 	    			);
 	    	this.supplierList.add(supplier);
 	    	this.supplierMap.put(supplier.getSupplierId(), supplier);
+	    	//System.out.println("In Supplier" + supplier.getSupplierId()+" "+supplier.hashCode());
 	    }
 	    /*for(Supplier sup: this.supplierList) {
     	System.out.println(sup.toString());
