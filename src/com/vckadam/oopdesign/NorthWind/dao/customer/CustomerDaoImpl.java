@@ -21,13 +21,17 @@ public class CustomerDaoImpl implements CustomerDao {
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\NorthWind\\dao\\customer\\customertext";
 	
 	public CustomerDaoImpl() throws IOException {
-		customerList = new ArrayList<Customer>();
+		this.customerMap = new HashMap<String, Customer>();
+		this.customerList = new ArrayList<Customer>();
 		loadList();
+		loadMap();
 	}
+	
 	@Override
 	public List<Customer> getAllCustomer() {
 		return null;
 	}
+	
 
 	private void loadList() throws IOException {
 		List<String> lines = new ArrayList<String>();
@@ -62,18 +66,18 @@ public class CustomerDaoImpl implements CustomerDao {
 	    }*/
 	}
 	
-	@Override
-	public Map<String, Customer> getCustomerMap() {
-		if(this.customerMap == null) loadMap();
-		return this.customerMap;
-	}
+	
 	
 	private void loadMap() {
-		this.customerMap = new HashMap<String, Customer>();
 		for(Customer cust : this.customerList) {
 			if(!this.customerMap.containsKey(cust.getCustomerId())){
 				this.customerMap.put(cust.getCustomerId(), cust);
 			}
 		}
+		//System.out.println(this.customerList.toString());
+	}
+	@Override
+	public Map<String, Customer> getCustomerMap() {
+		return this.customerMap;
 	}
 }
