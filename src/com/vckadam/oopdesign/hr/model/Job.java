@@ -2,8 +2,8 @@ package com.vckadam.oopdesign.hr.model;
 
 public class Job {
 	private String jobId, jobTitle;
-	private int maxSalary, minSalary;
-	public Job(String jobId, String jobTitle, int maxSalary, int minSalary) {
+	private double maxSalary, minSalary;
+	public Job(String jobId, String jobTitle, double maxSalary, double minSalary) {
 		super();
 		this.jobId = jobId;
 		this.jobTitle = jobTitle;
@@ -22,16 +22,16 @@ public class Job {
 	public void setJobTitle(String jobTitle) {
 		this.jobTitle = jobTitle;
 	}
-	public int getMaxSalary() {
+	public double getMaxSalary() {
 		return maxSalary;
 	}
-	public void setMaxSalary(int maxSalary) {
+	public void setMaxSalary(double maxSalary) {
 		this.maxSalary = maxSalary;
 	}
-	public int getMinSalary() {
+	public double getMinSalary() {
 		return minSalary;
 	}
-	public void setMinSalary(int minSalary) {
+	public void setMinSalary(double minSalary) {
 		this.minSalary = minSalary;
 	}
 	
