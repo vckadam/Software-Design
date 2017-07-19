@@ -3,7 +3,7 @@ package com.vckadam.oopdesign.hr.model;
 public class Department {
 	private int deparmentId, managerId, locationId;
 	private String departmentName;
-	public Department(int deparmentId, int managerId, int locationId, String departmentName) {
+	public Department(int deparmentId, String departmentName, int managerId, int locationId) {
 		super();
 		this.deparmentId = deparmentId;
 		this.managerId = managerId;
