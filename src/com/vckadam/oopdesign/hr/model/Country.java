@@ -3,7 +3,7 @@ package com.vckadam.oopdesign.hr.model;
 public class Country {
 	private int regionId;
 	private String countryId, countryName;
-	public Country(String countryId, int regionId, String countryName) {
+	public Country(String countryId, String countryName, int regionId) {
 		super();
 		this.countryId = countryId;
 		this.regionId = regionId;
