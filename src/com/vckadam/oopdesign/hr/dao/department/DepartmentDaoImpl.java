@@ -4,19 +4,24 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vckadam.oopdesign.hr.model.Department;
 
 public class DepartmentDaoImpl implements DepartmentDao {
 
 	List<Department> departmentList;
+	Map<Integer, List<Department>> departmentByLocation;
 	
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\hr\\dao\\department\\departmentfile";
 	
 	public DepartmentDaoImpl() throws IOException {
 		this.departmentList = new ArrayList<Department>();
+		this.departmentByLocation = new HashMap<Integer,List<Department>>();
 		loadList();
+		loadMap();
 	}
 	
 	public void loadList() throws IOException {
@@ -43,9 +48,23 @@ public class DepartmentDaoImpl implements DepartmentDao {
 	    }
 	}
 	
+	public void loadMap() {
+		for(Department department: this.departmentList) {
+			if(!this.departmentByLocation.containsKey(department.getLocationId())) {
+				this.departmentByLocation.put(department.getLocationId(), new ArrayList<Department>());
+			}
+			this.departmentByLocation.get(department.getLocationId()).add(department);
+		}
+	}
+	
 	@Override
 	public List<Department> getDepartmentList() {
 		return this.departmentList;
 	}
 
+	@Override
+	public List<Department> getDepartmentByLocation(int locationId) {
+		if(!this.departmentByLocation.containsKey(locationId)) return null;
+		return this.departmentByLocation.get(locationId);
+	}
 }

@@ -6,4 +6,5 @@ import com.vckadam.oopdesign.hr.model.Location;
 
 public interface LocationDao {
 	public List<Location> getLocationList();
+	public Location getLocationWithCity(String city);
 }

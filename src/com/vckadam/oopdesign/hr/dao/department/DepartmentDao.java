@@ -6,4 +6,5 @@ import com.vckadam.oopdesign.hr.model.Department;
 
 public interface DepartmentDao {
 	public List<Department> getDepartmentList();
+	public List<Department> getDepartmentByLocation(int locationId);
 }

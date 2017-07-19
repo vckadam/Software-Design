@@ -6,18 +6,24 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vckadam.oopdesign.hr.model.Employee;
 
 public class EmployeeDaoImpl implements EmployeeDao {
 	
 	List<Employee> employeeList;
+	Map<Integer, List<Employee>> employeesByDepartment;
+	
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\hr\\dao\\employee\\employeefile";
 	
 	public EmployeeDaoImpl() throws NumberFormatException, IOException, ParseException {
 		this.employeeList = new ArrayList<Employee>();
+		this.employeesByDepartment = new HashMap<Integer,List<Employee>>();
 		loadList();
+		loadMap();
 	}
 	
 	public void loadList() throws IOException, NumberFormatException, ParseException {
@@ -50,10 +56,25 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	    	this.employeeList.add(employee);
 	    }
 	}
+	
+	public void loadMap() {
+		for(Employee employee : this.employeeList) {
+			if(!this.employeesByDepartment.containsKey(employee.getDepartmentId())) {
+				this.employeesByDepartment.put(employee.getDepartmentId(), new ArrayList<Employee>());
+			}
+			this.employeesByDepartment.get(employee.getDepartmentId()).add(employee);
+		}
+	}
 
 	@Override
 	public List<Employee> getEmployeeList() {
 		return this.employeeList;
+	}
+
+	@Override
+	public List<Employee> employeesByDepartment(Integer departmentId) {
+		if(!this.employeesByDepartment.containsKey(departmentId)) return null;
+		return this.employeesByDepartment.get(departmentId);
 	}
 	
 }

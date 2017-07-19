@@ -46,4 +46,14 @@ public class LocationDaoImplTest {
 		assertEquals(expectedSet, actualSet);
 	}
 	
+	@Test
+	public void getLocationWithCityTest1() {
+		Location location = this.locationDao.getLocationWithCity("London");
+		assertEquals(2400, location.getLocationId());
+	}
+	
+	@Test
+	public void getLocationWithCityTest2() {
+		assertEquals(null, this.locationDao.getLocationWithCity("Vadodara"));
+	}
 }

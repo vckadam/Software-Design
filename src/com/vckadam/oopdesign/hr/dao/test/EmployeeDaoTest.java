@@ -44,4 +44,42 @@ public class EmployeeDaoTest {
 		assertEquals(employeeList.get(employeeList.size()-1).getDepartmentId(), 110);
 		
 	}
+	
+	/** If employees exist for given department.*/
+	@Test
+	public void getEmployeesByDepartmentTest1() {
+		List<Employee> employees = this.employeeDao.employeesByDepartment(90);
+		Set<Integer> actualSet = new HashSet<Integer>();
+		for(Employee employee : employees) {
+			actualSet.add(employee.getEmpId());
+		}
+		
+		Set<Integer> expectedSet = new HashSet<Integer>();
+		expectedSet.add(100);  expectedSet.add(101); expectedSet.add(102);
+		
+		assertEquals(expectedSet.size(), employees.size());
+		assertEquals(expectedSet, actualSet);
+	}
+	
+	/** If only one employee exist for given department.*/
+	@Test
+	public void getEmployeesByDepartmentTest2() {
+		List<Employee> employees = this.employeeDao.employeesByDepartment(0);
+		Set<Integer> actualSet = new HashSet<Integer>();
+		for(Employee employee : employees) {
+			actualSet.add(employee.getEmpId());
+		}
+		
+		Set<Integer> expectedSet = new HashSet<Integer>();
+		expectedSet.add(178); 
+		
+		assertEquals(expectedSet.size(), employees.size());
+		assertEquals(expectedSet, actualSet);
+	}
+	
+	/** If employees don't exist for given department.*/
+	@Test
+	public void getEmployeesByDepartmentTest3() {
+		assertEquals(null, this.employeeDao.employeesByDepartment(-1));
+	}
 }

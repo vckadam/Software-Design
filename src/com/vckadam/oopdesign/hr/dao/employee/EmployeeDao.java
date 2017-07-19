@@ -6,4 +6,5 @@ import com.vckadam.oopdesign.hr.model.Employee;
 
 public interface EmployeeDao {
 	public List<Employee> getEmployeeList();
+	public List<Employee> employeesByDepartment(Integer departmentId);
 }

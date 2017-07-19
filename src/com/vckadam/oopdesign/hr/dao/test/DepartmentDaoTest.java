@@ -3,6 +3,7 @@ package com.vckadam.oopdesign.hr.dao.test;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,5 +43,26 @@ public class DepartmentDaoTest {
 		
 		assertEquals(expectedSet.size(), departmentList.size());
 		assertEquals(expectedSet, actualSet);
+	}
+	
+	/** Department exist with the given location.*/
+	@Test
+	public void getDepartmentByLocationTest1() {
+		List<Department> actualList = this.departmentDao.getDepartmentByLocation(1800);
+		Set<Integer> actualSet = new HashSet<Integer>();
+		for(Department department : actualList) {
+			actualSet.add(department.getDeparmentId());
+		}
+		
+		Set<Integer> expectedSet = new HashSet<Integer>(Arrays.asList(20));
+		assertEquals(expectedSet.size(), actualList.size());
+		assertEquals(expectedSet, actualSet);
+	}
+	
+	/** Department doesn't exist with the given location.*/
+	@Test
+	public void getDepartmentByLocationTest2() {
+		List<Department> departments = this.departmentDao.getDepartmentByLocation(25);
+		assertEquals(null, departments);
 	}
 }
