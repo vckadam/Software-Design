@@ -2,7 +2,7 @@ package com.vckadam.oopdesign.NorthWind.model;
 
 public class OrderDetail {
 	private int orderId, productId, quantity;
-	private double unitPrice, discount;
+	private double unitPrice, discount;	
 	public OrderDetail(int orderId, int productId, int quantity, double unitPrice, double discount) {
 		super();
 		this.orderId = orderId;
