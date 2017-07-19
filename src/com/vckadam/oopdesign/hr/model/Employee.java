@@ -3,11 +3,12 @@ package com.vckadam.oopdesign.hr.model;
 import java.util.Date;
 
 public class Employee {
-	private int empId, salary, commission, managerId, departmentId;
+	private int empId, managerId, departmentId;
 	private String firstName, lastName, email, phoneNumber, jobId;
 	private Date hireDate;
-	public Employee(int empId, int salary, int commission, int managerId, int departmentId, String firstName,
-			String lastName, String email, String phoneNumber, String jobId, Date hireDate) {
+	private double salary, commission;
+	public Employee(int empId,  String firstName, String lastName, String email, String phoneNumber, Date hireDate, 
+			String jobId, double salary, double commission, int managerId, int departmentId) {
 		super();
 		this.empId = empId;
 		this.salary = salary;
@@ -27,16 +28,16 @@ public class Employee {
 	public void setEmpId(int empId) {
 		this.empId = empId;
 	}
-	public int getSalary() {
+	public double getSalary() {
 		return salary;
 	}
-	public void setSalary(int salary) {
+	public void setSalary(double salary) {
 		this.salary = salary;
 	}
-	public int getCommission() {
+	public double getCommission() {
 		return commission;
 	}
-	public void setCommission(int commission) {
+	public void setCommission(double commission) {
 		this.commission = commission;
 	}
 	public int getManagerId() {
