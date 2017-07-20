@@ -8,4 +8,5 @@ public interface EmployeeDao {
 	public List<Employee> getEmployeeList();
 	public List<Employee> getEmployeeJoinAfter(String name);
 	public List<Employee> employeesByDepartment(Integer departmentId);
+	public int numberOfEmployeeInDept(int deptId);
 }

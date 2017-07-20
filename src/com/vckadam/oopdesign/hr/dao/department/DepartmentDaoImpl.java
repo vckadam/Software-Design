@@ -14,12 +14,14 @@ public class DepartmentDaoImpl implements DepartmentDao {
 
 	List<Department> departmentList;
 	Map<Integer, List<Department>> departmentByLocation;
+	Map<String, Department> departmentByName;
 	
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\hr\\dao\\department\\departmentfile";
 	
 	public DepartmentDaoImpl() throws IOException {
 		this.departmentList = new ArrayList<Department>();
 		this.departmentByLocation = new HashMap<Integer,List<Department>>();
+		this.departmentByName = new HashMap<String,Department>();
 		loadList();
 		loadMap();
 	}
@@ -54,6 +56,9 @@ public class DepartmentDaoImpl implements DepartmentDao {
 				this.departmentByLocation.put(department.getLocationId(), new ArrayList<Department>());
 			}
 			this.departmentByLocation.get(department.getLocationId()).add(department);
+			if(!this.departmentByName.containsKey(department.getDepartmentName())) {
+				this.departmentByName.put(department.getDepartmentName(), department);
+			}
 		}
 	}
 	
@@ -66,5 +71,11 @@ public class DepartmentDaoImpl implements DepartmentDao {
 	public List<Department> getDepartmentByLocation(int locationId) {
 		if(!this.departmentByLocation.containsKey(locationId)) return null;
 		return this.departmentByLocation.get(locationId);
+	}
+
+	@Override
+	public Department getDepartmentByName(String name) {
+		if(!this.departmentByName.containsKey(name)) return null;
+		return this.departmentByName.get(name);
 	}
 }

@@ -65,4 +65,10 @@ public class DepartmentDaoTest {
 		List<Department> departments = this.departmentDao.getDepartmentByLocation(25);
 		assertEquals(null, departments);
 	}
+	
+	@Test
+	public void getDepartmentByNameTest1() {
+		Department dept = this.departmentDao.getDepartmentByName("Marketing");
+		assertEquals(20,dept.getDeparmentId());
+	}
 }

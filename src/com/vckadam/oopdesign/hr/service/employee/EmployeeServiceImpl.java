@@ -36,9 +36,18 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
-	public List<Employee> getEmployeeJoinAfter(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Employee> getEmployeeJoinAfter(String name) throws NumberFormatException, IOException, ParseException {
+		EmployeeDao employeeDao = new EmployeeDaoImpl();
+		return employeeDao.getEmployeeJoinAfter(name);
+	}
+
+	@Override
+	public int getEmployeesInDept(String name) throws IOException, NumberFormatException, ParseException {
+		DepartmentDao deptDao = new DepartmentDaoImpl();
+		Department dept = deptDao.getDepartmentByName(name);
+		if(dept == null) return 0;
+		EmployeeDao empDao = new EmployeeDaoImpl();
+		return empDao.numberOfEmployeeInDept(dept.getDeparmentId());
 	}
 
 }

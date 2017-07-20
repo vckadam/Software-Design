@@ -19,6 +19,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	List<Employee> employeeList;
 	Map<Integer, List<Employee>> employeesByDepartment;
 	Map<String, List<Employee>> employeeOrder;
+	Map<Integer, Integer> noOfEmpInDept;
 	
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\hr\\dao\\employee\\employeefile";
 	
@@ -26,6 +27,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		this.employeeList = new ArrayList<Employee>();
 		this.employeesByDepartment = new HashMap<Integer,List<Employee>>();
 		this.employeeOrder = new HashMap<String,List<Employee>>();
+		this.noOfEmpInDept = new HashMap<Integer,Integer>();
 		loadList();
 		loadMap();
 	}
@@ -67,6 +69,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 				this.employeesByDepartment.put(employee.getDepartmentId(), new ArrayList<Employee>());
 			}
 			this.employeesByDepartment.get(employee.getDepartmentId()).add(employee);
+			this.noOfEmpInDept.put(employee.getDepartmentId(), 
+					this.noOfEmpInDept.getOrDefault(employee.getDepartmentId(),0)+1);
 		}
 		List<Employee> employeeList = new ArrayList<Employee>(this.employeeList);
 		Comparator<Employee> comp = new Comparator<Employee>() {
@@ -105,6 +109,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	public List<Employee> getEmployeeJoinAfter(String name) {
 		if(!this.employeeOrder.containsKey(name)) return null;
 		return this.employeeOrder.get(name);
+	}
+
+	@Override
+	public int numberOfEmployeeInDept(int deptNo) {
+		if(!this.noOfEmpInDept.containsKey(deptNo)) return 0;
+		return this.noOfEmpInDept.get(deptNo);
 	}
 	
 }

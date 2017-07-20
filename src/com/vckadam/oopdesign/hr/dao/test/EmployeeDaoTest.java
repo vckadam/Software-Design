@@ -115,4 +115,18 @@ public class EmployeeDaoTest {
 		assertEquals(expectedSet.size(), employeeList.size());
 		assertEquals(expectedSet, actualSet);
 	}
+	
+	/** Employees exist in the department.*/
+	@Test
+	public void numberOfEmployeeInDeptTest1() {
+		int actual = this.employeeDao.numberOfEmployeeInDept(90);
+		assertEquals(3, actual);
+	}
+	
+	/** Employees don't exist in the department.*/
+	@Test
+	public void numberOfEmployeeInDeptTest2() {
+		int actual = this.employeeDao.numberOfEmployeeInDept(190);
+		assertEquals(0, actual);
+	}
 }

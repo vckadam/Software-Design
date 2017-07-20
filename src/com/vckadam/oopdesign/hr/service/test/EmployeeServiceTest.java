@@ -51,4 +51,9 @@ public class EmployeeServiceTest {
 	public void getEmployeeWorkInTest2() throws NumberFormatException, IOException, ParseException {
 		assertEquals(null, this.employeeService.getemployeeWorkIn("Bombay"));
 	}
+	
+	@Test
+	public void getEmployeesInDeptTest1() throws NumberFormatException, IOException, ParseException {
+		assertEquals(3, this.employeeService.getEmployeesInDept("Executive"));
+	}
 }
