@@ -19,10 +19,6 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<Employee> getemployeeWorkIn(String city) throws IOException, NumberFormatException, ParseException {
-		/* 
-		 * get location - get department - get employee
-		 * 
-		 * */
 		List<Employee> employees = new ArrayList<Employee>();
 		LocationDao locationDao = new LocationDaoImpl();
 		Location location = locationDao.getLocationWithCity(city);
@@ -37,6 +33,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 			employees.addAll(employeesIndept);
 		}
 		return employees;
+	}
+
+	@Override
+	public List<Employee> getEmployeeJoinAfter(String name) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

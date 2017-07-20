@@ -82,4 +82,37 @@ public class EmployeeDaoTest {
 	public void getEmployeesByDepartmentTest3() {
 		assertEquals(null, this.employeeDao.employeesByDepartment(-1));
 	}
+	
+	@Test
+	public void getEmployeeJoinAfterTest1() {
+		List<Employee> employeeList = this.employeeDao.getEmployeeJoinAfter("Higgins");
+		Set<String> actualSet = new HashSet<String>();
+		for(Employee emp : employeeList) {
+			actualSet.add(emp.getLastName());
+		}
+		
+		Set<String> expectedSet = new HashSet<String>();
+		expectedSet.add("Gietz");
+		
+		assertEquals(expectedSet.size(), employeeList.size());
+		assertEquals(expectedSet, actualSet);
+	}
+	
+	@Test
+	public void getEmployeeJoinAfterTest2() {
+		List<Employee> employeeList = this.employeeDao.getEmployeeJoinAfter("Jones");
+		Set<String> actualSet = new HashSet<String>();
+		for(Employee emp : employeeList) {
+			actualSet.add(emp.getLastName());
+		}
+		
+		Set<String> expectedSet = new HashSet<String>();
+		expectedSet.add("Walsh"); expectedSet.add("Feeney"); expectedSet.add("OConnell");
+		expectedSet.add("Grant"); expectedSet.add("Whalen"); expectedSet.add("Hartstein");
+		expectedSet.add("Fay"); expectedSet.add("Mavris"); expectedSet.add("Baer");
+		expectedSet.add("Higgins"); expectedSet.add("Gietz");
+		
+		assertEquals(expectedSet.size(), employeeList.size());
+		assertEquals(expectedSet, actualSet);
+	}
 }

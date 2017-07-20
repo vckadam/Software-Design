@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,12 +18,14 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	
 	List<Employee> employeeList;
 	Map<Integer, List<Employee>> employeesByDepartment;
+	Map<String, List<Employee>> employeeOrder;
 	
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\hr\\dao\\employee\\employeefile";
 	
 	public EmployeeDaoImpl() throws NumberFormatException, IOException, ParseException {
 		this.employeeList = new ArrayList<Employee>();
 		this.employeesByDepartment = new HashMap<Integer,List<Employee>>();
+		this.employeeOrder = new HashMap<String,List<Employee>>();
 		loadList();
 		loadMap();
 	}
@@ -29,7 +33,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	public void loadList() throws IOException, NumberFormatException, ParseException {
 		List<String> lines = new ArrayList<String>();
 	    BufferedReader reader = null;
-	    SimpleDateFormat parser=new SimpleDateFormat("yyyy-mm-dd");
+	    SimpleDateFormat parser=new SimpleDateFormat("yyyy-MM-dd");
 	    try {
 	        reader = new BufferedReader(new FileReader(FILENAME));
 	        String line = null;
@@ -64,6 +68,26 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			}
 			this.employeesByDepartment.get(employee.getDepartmentId()).add(employee);
 		}
+		List<Employee> employeeList = new ArrayList<Employee>(this.employeeList);
+		Comparator<Employee> comp = new Comparator<Employee>() {
+			public int compare(Employee e1, Employee e2) {
+				int ret = e1.getHireDate().compareTo(e2.getHireDate());
+				return ret;
+			}
+		};
+		Collections.sort(employeeList, comp);
+		
+		for(int i = 0; i < employeeList.size(); i++) {
+			List<Employee> tempList = new ArrayList<Employee>();
+			Employee currEmployee = employeeList.get(i);
+			for(int j = i; j < employeeList.size(); j++) {
+				Employee emp = employeeList.get(j);
+				if(currEmployee.getHireDate().compareTo(emp.getHireDate()) >= 0) continue;
+				tempList.add(emp);
+			}
+			this.employeeOrder.put(currEmployee.getLastName(), tempList);
+		}
+		
 	}
 
 	@Override
@@ -75,6 +99,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	public List<Employee> employeesByDepartment(Integer departmentId) {
 		if(!this.employeesByDepartment.containsKey(departmentId)) return null;
 		return this.employeesByDepartment.get(departmentId);
+	}
+
+	@Override
+	public List<Employee> getEmployeeJoinAfter(String name) {
+		if(!this.employeeOrder.containsKey(name)) return null;
+		return this.employeeOrder.get(name);
 	}
 	
 }

@@ -8,4 +8,5 @@ import com.vckadam.oopdesign.hr.model.Employee;
 
 public interface EmployeeService {
 	public List<Employee> getemployeeWorkIn(String city) throws IOException, NumberFormatException, ParseException;
+	public List<Employee> getEmployeeJoinAfter(String name);
 }
