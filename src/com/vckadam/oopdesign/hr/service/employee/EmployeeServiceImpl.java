@@ -3,12 +3,16 @@ package com.vckadam.oopdesign.hr.service.employee;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vckadam.oopdesign.hr.dao.department.DepartmentDao;
 import com.vckadam.oopdesign.hr.dao.department.DepartmentDaoImpl;
 import com.vckadam.oopdesign.hr.dao.employee.EmployeeDao;
 import com.vckadam.oopdesign.hr.dao.employee.EmployeeDaoImpl;
+import com.vckadam.oopdesign.hr.dao.job.JobDao;
+import com.vckadam.oopdesign.hr.dao.job.JobDaoImpl;
 import com.vckadam.oopdesign.hr.dao.location.LocationDao;
 import com.vckadam.oopdesign.hr.dao.location.LocationDaoImpl;
 import com.vckadam.oopdesign.hr.model.Department;
@@ -48,6 +52,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 		if(dept == null) return 0;
 		EmployeeDao empDao = new EmployeeDaoImpl();
 		return empDao.numberOfEmployeeInDept(dept.getDeparmentId());
+	}
+
+	@Override
+	public Map<String, Double> avgSalaryByJob() throws NumberFormatException, IOException, ParseException {
+		EmployeeDao employeeDao = new EmployeeDaoImpl();
+		Map<String, Double> avgByIdMap = employeeDao.avgSalaryByJob();
+		JobDao jobDao = new JobDaoImpl();
+		Map<String, Double> avgByTitleMap = new HashMap<String, Double>();
+		for(String jobId : avgByIdMap.keySet()) {
+			String jobTitle = jobDao.getJobById(jobId).getJobTitle();
+			avgByTitleMap.put(jobTitle, avgByIdMap.get(jobId));
+		}
+		return avgByTitleMap;
 	}
 
 }

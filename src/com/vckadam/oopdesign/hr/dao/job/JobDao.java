@@ -6,4 +6,5 @@ import com.vckadam.oopdesign.hr.model.Job;
 
 public interface JobDao {
 	public List<Job> getJobList();
+	public Job getJobById(String jobId);
 }	

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import org.junit.After;
@@ -128,5 +129,12 @@ public class EmployeeDaoTest {
 	public void numberOfEmployeeInDeptTest2() {
 		int actual = this.employeeDao.numberOfEmployeeInDept(190);
 		assertEquals(0, actual);
+	}
+	
+	@Test
+	public void avgSalaryByJobTest() {
+		Map<String,Double> actualMap = this.employeeDao.avgSalaryByJob();
+		Double actualAvg = actualMap.get("AD_VP");
+		assertEquals(17000.00, actualAvg.doubleValue(),2);
 	}
 }

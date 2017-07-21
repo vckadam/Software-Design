@@ -49,4 +49,10 @@ public class JobDaoTest {
 		assertEquals(expectedSet.size(), jobList.size());
 		assertEquals(expectedSet, actualSet);
 	}
+	
+	@Test
+	public void getJobByIdTest() {
+		Job job = this.jobDao.getJobById("FI_MGR");
+		assertEquals("Finance Manager",job.getJobTitle());
+	}
 }

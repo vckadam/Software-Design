@@ -4,18 +4,22 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.vckadam.oopdesign.hr.model.Job;
 
 public class JobDaoImpl implements JobDao {
 
 	private List<Job> jobList;
+	Map<String, Job> jobById;
 	
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\hr\\dao\\job\\jobfile";
 	
 	public JobDaoImpl() throws IOException {
 		this.jobList = new ArrayList<Job>();
+		this.jobById = new HashMap<String,Job>();
 		loadList();
 	}
 	
@@ -40,12 +44,19 @@ public class JobDaoImpl implements JobDao {
 	    			Double.valueOf(strA[3].substring(1,strA[3].length()-1))
 	    			);
 	    	this.jobList.add(job);
+	    	this.jobById.put(job.getJobId(), job);
 	    }
 	}
 	
 	@Override
 	public List<Job> getJobList() {
 		return this.jobList;
+	}
+
+	@Override
+	public Job getJobById(String jobId) {
+		if(!this.jobById.containsKey(jobId)) return null;
+		return this.jobById.get(jobId);
 	}
 
 }

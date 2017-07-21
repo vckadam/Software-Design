@@ -116,5 +116,22 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		if(!this.noOfEmpInDept.containsKey(deptNo)) return 0;
 		return this.noOfEmpInDept.get(deptNo);
 	}
+
+	@Override
+	public Map<String, Double> avgSalaryByJob() {
+		Map<String,Double> avgSalaryMap = new HashMap<String,Double>();
+		Map<String,double[]> countMap = new HashMap<String,double[]>();
+		for(Employee employee : this.employeeList) {
+			if(!countMap.containsKey(employee.getJobId())) countMap.put(employee.getJobId(), new double[2]);
+			double[] currCount = countMap.get(employee.getJobId());
+			currCount[0] += employee.getSalary();
+			currCount[1]++;
+		}
+		for(String key : countMap.keySet()) {
+			double[] currCount = countMap.get(key);
+			avgSalaryMap.put(key, currCount[0]/currCount[1]);
+		}
+		return avgSalaryMap;
+	}
 	
 }
