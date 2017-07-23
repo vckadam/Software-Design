@@ -6,8 +6,10 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +22,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	Map<Integer, List<Employee>> employeesByDepartment;
 	Map<String, List<Employee>> employeeOrder;
 	Map<Integer, Integer> noOfEmpInDept;
+	Map<Integer, Employee> employeeByEmpId;
+	List<Employee> employeeByAge;
 	
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\hr\\dao\\employee\\employeefile";
 	
@@ -28,8 +32,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		this.employeesByDepartment = new HashMap<Integer,List<Employee>>();
 		this.employeeOrder = new HashMap<String,List<Employee>>();
 		this.noOfEmpInDept = new HashMap<Integer,Integer>();
+		this.employeeByEmpId = new HashMap<Integer,Employee>();
 		loadList();
 		loadMap();
+		employeeByAgeSetup();
 	}
 	
 	public void loadList() throws IOException, NumberFormatException, ParseException {
@@ -60,6 +66,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	    			Integer.valueOf(strA[9].substring(1,strA[9].length()-1)),
 	    			Integer.valueOf(strA[10].substring(1,strA[10].length()-1)));
 	    	this.employeeList.add(employee);
+	    	this.employeeByEmpId.put(employee.getEmpId(),employee);
 	    }
 	}
 	
@@ -132,6 +139,45 @@ public class EmployeeDaoImpl implements EmployeeDao {
 			avgSalaryMap.put(key, currCount[0]/currCount[1]);
 		}
 		return avgSalaryMap;
+	}
+
+	@Override
+	public Employee getEmployeeById(int empId) {
+		if(this.employeeByEmpId.containsKey(empId)) {
+			return this.employeeByEmpId.get(empId);
+		}
+		return null;
+	}
+	
+	public void employeeByAgeSetup() {
+		this.employeeByAge = new ArrayList<Employee>(this.employeeList);
+		Comparator<Employee> comp = new Comparator<Employee>() {
+			public int compare(Employee e1, Employee e2) {
+				return e1.getHireDate().getDate() - e2.getHireDate().getDate();
+			}
+		};
+		Collections.sort(this.employeeByAge, comp);
+	}
+	
+	public List<Employee> getEmpeWithExp(int year) {
+		int left = 0, right = this.employeeByAge.size()-1;
+		Date currDate = new Date();
+		if(currDate.getDate() - this.employeeByAge.get(left).getHireDate().getDate() > year) 
+			return this.employeeByAge;
+		
+		if(currDate.getDate() - this.employeeByAge.get(right).getHireDate().getDate() < year) 
+			return null;
+		
+		while(left < right) {
+			int mid = left + (right - left) / 2;
+			Date empHireDate = this.employeeByAge.get(mid).getHireDate();
+			if(currDate.getDate() - empHireDate.getDate() >= year) right = mid;
+			else left = mid + 1;
+		
+		}
+		
+		return this.employeeByAge.subList(left, this.employeeByAge.size());
+		
 	}
 	
 }

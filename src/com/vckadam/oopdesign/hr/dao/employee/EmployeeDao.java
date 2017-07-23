@@ -11,4 +11,6 @@ public interface EmployeeDao {
 	public List<Employee> employeesByDepartment(Integer departmentId);
 	public int numberOfEmployeeInDept(int deptId);
 	public Map<String,Double> avgSalaryByJob();
+	public Employee getEmployeeById(int empId);
+	public List<Employee> getEmpeWithExp(int year);
 }

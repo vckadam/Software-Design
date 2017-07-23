@@ -137,4 +137,22 @@ public class EmployeeDaoTest {
 		Double actualAvg = actualMap.get("AD_VP");
 		assertEquals(17000.00, actualAvg.doubleValue(),2);
 	}
+	
+	@Test
+	public void getEmployeeByIdTest() {
+		Employee emp = this.employeeDao.getEmployeeById(100);
+		assertEquals("Steven", emp.getFirstName());
+	}
+	
+	@Test
+	public void getEmpeWithExpTest1() {
+		List<Employee> actualList = this.employeeDao.getEmpeWithExp(1);
+		assertEquals(107, actualList.size());
+	}
+	
+	@Test
+	public void getEmpeWithExpTest2() {
+		List<Employee> actualList = this.employeeDao.getEmpeWithExp(50);
+		assertEquals(null, actualList);
+	}
 }

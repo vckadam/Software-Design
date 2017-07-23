@@ -23,7 +23,7 @@ public class EmployeeServiceTest {
 	private EmployeeService employeeService;
 	
 	@Before
-	public void beforeMethod() {
+	public void beforeMethod() throws NumberFormatException, IOException, ParseException {
 		this.employeeService = new EmployeeServiceImpl();
 	}
 	
@@ -84,5 +84,11 @@ public class EmployeeServiceTest {
 		expectedMap.put("Stock Manager",(double) 7280);
 		assertEquals(expectedMap, actualMap);
 		
+	}
+	
+	@Test
+	public void managerWithExperienceTest1() {
+		List<Employee> actualList = this.employeeService.managerWithExperience(15);
+		assertEquals(11, actualList.size());
 	}
 }

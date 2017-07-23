@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.vckadam.oopdesign.hr.dao.department.DepartmentDao;
 import com.vckadam.oopdesign.hr.dao.department.DepartmentDaoImpl;
@@ -21,6 +23,14 @@ import com.vckadam.oopdesign.hr.model.Location;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
+	private EmployeeDao employeeDao;
+	private DepartmentDao departmentDao;
+	
+	public EmployeeServiceImpl() throws NumberFormatException, IOException, ParseException {
+		this.employeeDao = new EmployeeDaoImpl();
+		this.departmentDao = new DepartmentDaoImpl();
+	}
+	
 	@Override
 	public List<Employee> getemployeeWorkIn(String city) throws IOException, NumberFormatException, ParseException {
 		List<Employee> employees = new ArrayList<Employee>();
@@ -65,6 +75,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 			avgByTitleMap.put(jobTitle, avgByIdMap.get(jobId));
 		}
 		return avgByTitleMap;
+	}
+
+	@Override
+	public List<Employee> managerWithExperience(int year) {
+		List<Employee> empList = this.employeeDao.getEmpeWithExp(year);
+		if(empList != null) {
+			Set<Integer> empSet =new HashSet<Integer>();
+			for(Employee emp : empList) {
+				empSet.add(emp.getEmpId());
+			}
+			List<Employee> managersWithExp = new ArrayList<Employee>();
+			List<Department> depts = this.departmentDao.getDepartmentList();
+			for(Department dept : depts) {
+				if(empSet.contains(dept.getManagerId())) {
+					managersWithExp.add(this.employeeDao.getEmployeeById(dept.getManagerId()));
+				}
+			}
+			return managersWithExp;
+		}
+		
+		return null;
 	}
 
 }
