@@ -3,10 +3,10 @@ package com.vckadam.oopdesign.hr.dao.employee;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -24,6 +24,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	Map<Integer, Integer> noOfEmpInDept;
 	Map<Integer, Employee> employeeByEmpId;
 	List<Employee> employeeByAge;
+	List<Employee> empOrdBySal;
+	Map<String,Integer> ordIndMap;
 	
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\hr\\dao\\employee\\employeefile";
 	
@@ -36,6 +38,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		loadList();
 		loadMap();
 		employeeByAgeSetup();
+		this.empOrdBySal = new ArrayList<Employee>(this.employeeList);
+		this.ordIndMap = new HashMap<String,Integer>();
+		loadOrdIndMap();
 	}
 	
 	public void loadList() throws IOException, NumberFormatException, ParseException {
@@ -178,6 +183,40 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 		return this.employeeByAge.subList(left, this.employeeByAge.size());
 		
+	}
+	
+	private void loadOrdIndMap() {
+		Comparator<Employee> comp = new Comparator<Employee>() {
+
+			@Override
+			public int compare(Employee o1, Employee o2) {
+				if(o1.getSalary() <= o2.getSalary()) return -1;
+				else return 1;
+			}
+			
+		};
+		Collections.sort(this.empOrdBySal, comp);
+		int ind = 0;
+		for(Employee emp : this.empOrdBySal) {
+			if(!this.ordIndMap.containsKey(emp.getLastName())) {
+				this.ordIndMap.put(emp.getLastName(), ind++);
+			}
+		}
+	}
+
+	@Override
+	public List<Employee> getEmpMoreSal(String lastName) {
+		if(this.ordIndMap.containsKey(lastName)) {
+			int ind = this.ordIndMap.get(lastName);
+			DecimalFormat format = new DecimalFormat(".##");
+			double empSal = Double.valueOf(format.format(this.empOrdBySal.get(ind).getSalary()));
+			for(; ind < this.empOrdBySal.size(); ind++) 
+				if(empSal != Double.valueOf(new Double(format.format(this.empOrdBySal.get(ind).getSalary()))))
+					break;
+			return this.empOrdBySal.subList(ind, this.empOrdBySal.size());  
+		}
+		else 
+			return null;
 	}
 	
 }

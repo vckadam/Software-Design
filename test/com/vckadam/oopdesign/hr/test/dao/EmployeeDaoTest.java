@@ -155,4 +155,93 @@ public class EmployeeDaoTest {
 		List<Employee> actualList = this.employeeDao.getEmpeWithExp(50);
 		assertEquals(null, actualList);
 	}
+	
+	@Test
+	public void getEmpMoreSalTest() {
+		List<Employee> actualList = this.employeeDao.getEmpMoreSal("Bull");
+		Set<String> actualSet = getActualSetForGetEmpMoreSal(actualList);
+		
+		String[] result = {"Steven",
+				"Neena",
+				"Lex",
+				"Alexander",
+				"Bruce",
+				"David",
+				"Valli",
+				"Diana",
+				"Nancy",
+				"Daniel",
+				"John",
+				"Ismael",
+				"Jose Manuel",
+				"Luis",
+				"Den",
+				"Matthew",
+				"Adam",
+				"Payam",
+				"Shanta",
+				"Kevin",
+				"John",
+				"Karen",
+				"Alberto",
+				"Gerald",
+				"Eleni",
+				"Peter",
+				"David",
+				"Peter",
+				"Christopher",
+				"Nanette",
+				"Oliver",
+				"Janette",
+				"Patrick",
+				"Allan",
+				"Lindsey",
+				"Louise",
+				"Sarath",
+				"Clara",
+				"Danielle",
+				"Mattea",
+				"David",
+				"Sundar",
+				"Amit",
+				"Lisa",
+				"Harrison",
+				"Tayler",
+				"William",
+				"Elizabeth",
+				"Sundita",
+				"Ellen",
+				"Alyssa",
+				"Jonathon",
+				"Jack",
+				"Kimberely",
+				"Charles",
+				"Nandita",
+				"Jennifer",
+				"Michael",
+				"Pat",
+				"Susan",
+				"Hermann",
+				"Shelley",
+				"William"
+
+};
+		Set<String> expectedSet = getExpectedSetForGetEmpMoreSal(result);
+		//assertEquals(result.length, actualList.size());
+		assertEquals(expectedSet, actualSet);
+	}
+	
+	public Set<String> getExpectedSetForGetEmpMoreSal(String[] strA) {
+		Set<String> set = new HashSet<String>();
+		for(String str : strA) set.add(str);
+		return set;
+	}
+	
+	public Set<String> getActualSetForGetEmpMoreSal(List<Employee> list) {
+		Set<String> set  = new HashSet<String>();
+		for(Employee emp : list) {
+			set.add(emp.getFirstName());
+		}
+		return set;
+	}
 }
