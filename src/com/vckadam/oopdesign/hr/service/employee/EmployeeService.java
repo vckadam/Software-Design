@@ -13,4 +13,5 @@ public interface EmployeeService {
 	public int getEmployeesInDept(String name) throws IOException, NumberFormatException, ParseException ;
 	public Map<String,Double> avgSalaryByJob() throws NumberFormatException, IOException, ParseException ;
 	public List<Employee> managerWithExperience(int year);
+	public List<Employee> deptInCountry(String country);
 }

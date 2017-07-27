@@ -91,4 +91,102 @@ public class EmployeeServiceTest {
 		List<Employee> actualList = this.employeeService.managerWithExperience(15);
 		assertEquals(11, actualList.size());
 	}
+	
+	@Test
+	public void deptInCountryTest1() {
+		List<Employee> emps = this.employeeService.deptInCountry("US");
+		Set<String> actualSet = prepareSet_deptInCountryTest(emps);
+		
+		String[] firstNames = {"Neena",
+				"Lex",
+				"Bruce",
+				"David",
+				"Valli",
+				"Diana",
+				"Nancy",
+				"Daniel",
+				"John",
+				"Ismael",
+				"Jose Manuel",
+				"Luis",
+				"Den",
+				"Alexander",
+				"Shelli",
+				"Sigal",
+				"Guy",
+				"Karen",
+				"Matthew",
+				"Adam",
+				"Payam",
+				"Shanta",
+				"Kevin",
+				"Julia",
+				"Irene",
+				"James",
+				"Steven",
+				"Laura",
+				"Mozhe",
+				"James",
+				"TJ",
+				"Jason",
+				"Michael",
+				"Ki",
+				"Hazel",
+				"Renske",
+				"Stephen",
+				"Joshua",
+				"Trenna",
+				"Curtis",
+				"Randall",
+				"Peter",
+				"John",
+				"Karen",
+				"Winston",
+				"Jean",
+				"Martha",
+				"Girard",
+				"Nandita",
+				"Alexis",
+				"Julia",
+				"Anthony",
+				"Kelly",
+				"Jennifer",
+				"Timothy",
+				"Randall",
+				"Sarah",
+				"Britney",
+				"Samuel",
+				"Vance",
+				"Alana",
+				"Kevin",
+				"Donald",
+				"Douglas",
+				"Jennifer",
+				"Michael",
+				"Shelley",
+				"William" };
+
+		
+		Set<String> expectedSet = prepareExpectedSet_deptInCountryTest(firstNames);
+		
+		assertEquals(firstNames.length, emps.size());
+		assertEquals(expectedSet, actualSet);
+	}
+	
+	
+	
+	
+	private Set<String> prepareSet_deptInCountryTest(List<Employee> emps) {
+		Set<String> set = new HashSet<String>();
+		for(Employee emp : emps) 
+			set.add(emp.getFirstName());
+		return set;
+	}
+	
+	private Set<String> prepareExpectedSet_deptInCountryTest(String[] strA) {
+		Set<String> set = new HashSet<String>();
+		for(String str : strA) set.add(str);
+		return set;
+	}
+	
 }

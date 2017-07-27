@@ -227,7 +227,7 @@ public class EmployeeDaoTest {
 
 };
 		Set<String> expectedSet = getExpectedSetForGetEmpMoreSal(result);
-		//assertEquals(result.length, actualList.size());
+		assertEquals(result.length, actualList.size());
 		assertEquals(expectedSet, actualSet);
 	}
 	

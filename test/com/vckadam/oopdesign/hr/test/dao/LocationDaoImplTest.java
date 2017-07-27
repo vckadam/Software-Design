@@ -3,6 +3,7 @@ package com.vckadam.oopdesign.hr.test.dao;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -55,5 +56,25 @@ public class LocationDaoImplTest {
 	@Test
 	public void getLocationWithCityTest2() {
 		assertEquals(null, this.locationDao.getLocationWithCity("Vadodara"));
+	}
+	
+	@Test
+	public void getLocByCountryTest() {
+		List<Location> actualList = this.locationDao.getLocByCountry("US");
+		Set<Integer> actualSet = null;
+		if(actualList != null)
+			actualSet= prepareActualSet(actualList);
+		
+		Set<Integer> expectedSet = new HashSet<Integer>(Arrays.asList(1400,1500,1600,1700));
+		assertEquals(4, actualList.size());
+		assertEquals(expectedSet, actualSet);
+	}
+	
+	private Set<Integer> prepareActualSet(List<Location> list) {
+		Set<Integer> set = new HashSet<Integer>();
+		for(Location loc : list) {
+			set.add(loc.getLocationId());
+		}
+		return set;
 	}
 }

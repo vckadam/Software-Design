@@ -14,12 +14,14 @@ public class LocationDaoImpl implements LocationDao {
 
 	private List<Location> locationList;
 	Map<String, Location> locationByCity;
+	Map<String, List<Location>> locByCountryIdMap;
 	
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\hr\\dao\\location\\locationfile";
 	
 	public LocationDaoImpl() throws IOException {
 		this.locationList = new ArrayList<Location>();
 		this.locationByCity = new HashMap<String, Location>();
+		this.locByCountryIdMap = new HashMap<String, List<Location>>();
 		loadList();
 	}
 	
@@ -47,7 +49,11 @@ public class LocationDaoImpl implements LocationDao {
 	    			);
 	    	this.locationList.add(location);
 	    	this.locationByCity.put(location.getCity(), location);
+	    	if(!this.locByCountryIdMap.containsKey(location.getCountryId()))
+	    		this.locByCountryIdMap.put(location.getCountryId(), new ArrayList<Location>());
+	    	this.locByCountryIdMap.get(location.getCountryId()).add(location);
 	    }
+	    //System.out.println(this.locByCountryIdMap.toString());
 	}
 	
 	@Override
@@ -59,6 +65,14 @@ public class LocationDaoImpl implements LocationDao {
 	public Location getLocationWithCity(String city) {
 		if(!this.locationByCity.containsKey(city)) return null;
 		return this.locationByCity.get(city);
+	}
+
+	@Override
+	public List<Location> getLocByCountry(String countryId) {
+		if(this.locByCountryIdMap.containsKey(countryId)) {
+			return this.locByCountryIdMap.get(countryId);
+		}
+		return null;
 	}
 
 }

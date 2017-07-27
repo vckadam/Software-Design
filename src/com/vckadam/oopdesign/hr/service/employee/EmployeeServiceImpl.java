@@ -25,10 +25,12 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	private EmployeeDao employeeDao;
 	private DepartmentDao departmentDao;
+	private LocationDao locationDao;
 	
 	public EmployeeServiceImpl() throws NumberFormatException, IOException, ParseException {
 		this.employeeDao = new EmployeeDaoImpl();
 		this.departmentDao = new DepartmentDaoImpl();
+		this.locationDao = new LocationDaoImpl();
 	}
 	
 	@Override
@@ -95,6 +97,27 @@ public class EmployeeServiceImpl implements EmployeeService {
 			return managersWithExp;
 		}
 		
+		return null;
+	}
+
+	@Override
+	public List<Employee> deptInCountry(String country) {
+		List<Location> locs = this.locationDao.getLocByCountry(country); 
+		if(locs != null) {
+			List<Employee> employeeList = new ArrayList<Employee>();
+			for(Location loc : locs) {
+				List<Department> depts = this.departmentDao.getDepartmentByLocation(loc.getLocationId());
+				if(depts != null) {
+					for(Department dept : depts) {
+						List<Employee> emps = this.employeeDao.employeesByDepartment(dept.getDeparmentId());
+						if(emps != null) {
+							employeeList.addAll(emps);
+						}
+					}
+				}
+			}
+			return employeeList;
+		}
 		return null;
 	}
 
