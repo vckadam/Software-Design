@@ -153,15 +153,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 	
 	public List<MinSalGradeEmp> getEmployeeMinSal(List<Employee> empList, List<Job> jobList) {
+		if(empList == null || jobList == null) 
+			throw new IllegalArgumentException("Invalid Input");
+		List<Employee> currEmpList = new ArrayList<Employee>(empList);
+		List<Job> currJobList = new ArrayList<Job>(jobList);
 		Map<String, MinSalGradeEmp> minSalEmp = new HashMap<>();
-		for(Job job : jobList) {
+		for(Job job : currJobList) {
 			if(job != null) {
 				if(!minSalEmp.containsKey(job.getJobId())) {
 					minSalEmp.put(job.getJobId(), new MinSalGradeEmp(job,new ArrayList<Employee>()));
 				}
 			}
 		}
-		for(Employee emp : empList) {
+		for(Employee emp : currEmpList) {
 			if(emp != null) {
 				String empJobId = emp.getJobId();
 				if(empJobId != null) {
@@ -176,7 +180,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		}
 		List<MinSalGradeEmp> ret = new ArrayList<>();
 		for(String key : minSalEmp.keySet()) {
-			ret.add(minSalEmp.get(key));
+			MinSalGradeEmp curr = minSalEmp.get(key);
+			if(curr.getEmps().size() > 0) 
+				ret.add(curr);
 		}
 		return ret;
 	}

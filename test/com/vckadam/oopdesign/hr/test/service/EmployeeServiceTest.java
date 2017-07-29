@@ -250,6 +250,122 @@ public class EmployeeServiceTest {
 		assertEquals(expectedIdsInJob, actuEmpIdsInJob);
 	}
 	
+	@Test
+	public void testGetEmployeeMinSal_NoMinSalEmp() {
+		int[] employeeIds = {1, 2, 3, 4 , 5};
+		double[] salary = {1000, 2000, 1000, 4000, 5000};
+		String[] empJobIds = {"JobId1", "JobId2","JobId1",  "JobId2", "JobId2"};
+		List<Employee> employeeList = prepareEmployeeList_testGetEmployeeMinSal(employeeIds,salary,empJobIds);
+		
+		String[] jobIds = {"JobId1", "JobId2"};
+		double[] minSal = {100, 200};
+		List<Job> jobList = prepareJobList_testGetEmployeeMinSal(jobIds,minSal);
+		
+		List<MinSalGradeEmp> actualList = this.employeeService.getEmployeeMinSal(employeeList, jobList);
+		
+		Map<String,List<Integer>> actuEmpIdsInJob = prepareActulMap_testGetEmployeeMinSal(actualList);
+		
+		Map<String,List<Integer>> expectedIdsInJob = new HashMap<>();
+		
+		
+		assertEquals(expectedIdsInJob, actuEmpIdsInJob);
+	}
+	
+	@Test
+	public void testGetEmployeeMinSal_NoEmpForJobId() {
+		int[] employeeIds = {1, 2, 3, 4 , 5};
+		double[] salary = {1000, 2000, 1000, 4000, 5000};
+		String[] empJobIds = {"JobId1", "JobId2","JobId1",  "JobId2", "JobId2"};
+		List<Employee> employeeList = prepareEmployeeList_testGetEmployeeMinSal(employeeIds,salary,empJobIds);
+		
+		String[] jobIds = {"JobId1", "JobId2", "JObId3"};
+		double[] minSal = {1000, 200, 300};
+		List<Job> jobList = prepareJobList_testGetEmployeeMinSal(jobIds,minSal);
+		
+		List<MinSalGradeEmp> actualList = this.employeeService.getEmployeeMinSal(employeeList, jobList);
+		
+		Map<String,List<Integer>> actuEmpIdsInJob = prepareActulMap_testGetEmployeeMinSal(actualList);
+		
+		Map<String,List<Integer>> expectedIdsInJob = new HashMap<>();
+		expectedIdsInJob.put("JobId1", new ArrayList<Integer>(Arrays.asList(1,3)));
+		
+		
+		assertEquals(expectedIdsInJob, actuEmpIdsInJob);
+	}
+	
+	@Test
+	public void testGetEmployeeMinSal_EmpWithNotValidJobId() {
+		int[] employeeIds = {1, 2, 3, 4 , 5};
+		double[] salary = {1000, 2000, 1000, 4000, 5000};
+		String[] empJobIds = {"JobId1", "JobId2","JobId1",  "JobId2", "JobId4"};
+		List<Employee> employeeList = prepareEmployeeList_testGetEmployeeMinSal(employeeIds,salary,empJobIds);
+		
+		String[] jobIds = {"JobId1", "JobId2", "JObId3"};
+		double[] minSal = {1000, 200, 300};
+		List<Job> jobList = prepareJobList_testGetEmployeeMinSal(jobIds,minSal);
+		
+		List<MinSalGradeEmp> actualList = this.employeeService.getEmployeeMinSal(employeeList, jobList);
+		
+		Map<String,List<Integer>> actuEmpIdsInJob = prepareActulMap_testGetEmployeeMinSal(actualList);
+		
+		Map<String,List<Integer>> expectedIdsInJob = new HashMap<>();
+		expectedIdsInJob.put("JobId1", new ArrayList<Integer>(Arrays.asList(1,3)));
+		
+		
+		assertEquals(expectedIdsInJob, actuEmpIdsInJob);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetEmployeeMinSal_NullEmpList() {
+		int[] employeeIds = {1, 2, 3, 4 , 5};
+		double[] salary = {1000, 2000, 1000, 4000, 5000};
+		String[] empJobIds = {"JobId1", "JobId2","JobId1",  "JobId2", "JobId4"};
+		List<Employee> employeeList = prepareEmployeeList_testGetEmployeeMinSal(employeeIds,salary,empJobIds);
+		
+		List<MinSalGradeEmp> actualList = this.employeeService.getEmployeeMinSal(employeeList, null);
+		
+		Map<String,List<Integer>> actuEmpIdsInJob = prepareActulMap_testGetEmployeeMinSal(actualList);
+		
+		Map<String,List<Integer>> expectedIdsInJob = new HashMap<>();
+		expectedIdsInJob.put("JobId1", new ArrayList<Integer>(Arrays.asList(1,3)));
+		
+		
+		assertEquals(expectedIdsInJob, actuEmpIdsInJob);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetEmployeeMinSal_NullEmpAndJobList() {
+		
+		List<MinSalGradeEmp> actualList = this.employeeService.getEmployeeMinSal(null, null);
+		
+		Map<String,List<Integer>> actuEmpIdsInJob = prepareActulMap_testGetEmployeeMinSal(actualList);
+		
+		Map<String,List<Integer>> expectedIdsInJob = new HashMap<>();
+		expectedIdsInJob.put("JobId1", new ArrayList<Integer>(Arrays.asList(1,3)));
+		
+		
+		assertEquals(expectedIdsInJob, actuEmpIdsInJob);
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetEmployeeMinSal_NullJobList() {
+		
+		String[] jobIds = {"JobId1", "JobId2", "JObId3"};
+		double[] minSal = {1000, 200, 300};
+		List<Job> jobList = prepareJobList_testGetEmployeeMinSal(jobIds,minSal);
+		
+		List<MinSalGradeEmp> actualList = this.employeeService.getEmployeeMinSal(null, jobList);
+		
+		Map<String,List<Integer>> actuEmpIdsInJob = prepareActulMap_testGetEmployeeMinSal(actualList);
+		
+		Map<String,List<Integer>> expectedIdsInJob = new HashMap<>();
+		expectedIdsInJob.put("JobId1", new ArrayList<Integer>(Arrays.asList(1,3)));
+		
+		
+		assertEquals(expectedIdsInJob, actuEmpIdsInJob);
+	}
+	
+	
 	private List<Employee> prepareEmployeeList_testGetEmployeeMinSal(int[] employeeIds, double[] salary, String[] empJobIds) {
 		List<Employee> empList = new ArrayList<Employee>();
 		for(int i = 0; i < employeeIds.length; i++) {
