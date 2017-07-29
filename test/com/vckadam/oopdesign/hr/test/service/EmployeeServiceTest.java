@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.vckadam.oopdesign.hr.model.Employee;
+import com.vckadam.oopdesign.hr.model.Manager;
 import com.vckadam.oopdesign.hr.service.employee.EmployeeService;
 import com.vckadam.oopdesign.hr.service.employee.EmployeeServiceImpl;
 
@@ -187,6 +190,36 @@ public class EmployeeServiceTest {
 		Set<String> set = new HashSet<String>();
 		for(String str : strA) set.add(str);
 		return set;
+	}
+	
+	@Test
+	public void testGetAllMangers_OneEmployeeInTeam() {
+		List<Manager> managerList = this.employeeService.getAllMangers();
+		Set<Integer> actualTeam = new HashSet<Integer>();
+		for(Manager manager : managerList) {
+			if(manager.getManager().getEmpId() ==  102) {
+				List<Employee> team = manager.getTeam();
+				for(Employee emp : team) actualTeam.add(emp.getEmpId());
+			}
+		}
+		
+		Set<Integer> expectedTeam = new HashSet<Integer>(Arrays.asList(103));
+		assertEquals(expectedTeam,actualTeam);
+	}
+	
+	@Test
+	public void testGetAllMangers_multipleEmployeesInTeam() {
+		List<Manager> managerList = this.employeeService.getAllMangers();
+		Set<Integer> actualTeam = new HashSet<Integer>();
+		for(Manager manager : managerList) {
+			if(manager.getManager().getEmpId() ==  101) {
+				List<Employee> team = manager.getTeam();
+				for(Employee emp : team) actualTeam.add(emp.getEmpId());
+			}
+		}
+		
+		Set<Integer> expectedTeam = new HashSet<Integer>(Arrays.asList(200, 203, 204, 205, 108));
+		assertEquals(expectedTeam,actualTeam);
 	}
 	
 }

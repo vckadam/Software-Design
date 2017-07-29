@@ -20,6 +20,7 @@ import com.vckadam.oopdesign.hr.dao.location.LocationDaoImpl;
 import com.vckadam.oopdesign.hr.model.Department;
 import com.vckadam.oopdesign.hr.model.Employee;
 import com.vckadam.oopdesign.hr.model.Location;
+import com.vckadam.oopdesign.hr.model.Manager;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
@@ -119,6 +120,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 			return employeeList;
 		}
 		return null;
+	}
+
+	@Override
+	public List<Manager> getAllMangers() {
+		List<Employee> employeeList = this.employeeDao.getEmployeeList();
+		Map<Integer,List<Employee>> manMap = new HashMap<Integer,List<Employee>>();
+		List<Manager> managerList = new ArrayList<Manager>();
+		for(Employee emp : employeeList) {
+			if(!manMap.containsKey(emp.getManagerId())) manMap.put(emp.getManagerId(),new ArrayList<Employee>());
+			manMap.get(emp.getManagerId()).add(emp);
+		}
+		for(Integer key : manMap.keySet()) {
+			Employee emp = this.employeeDao.getEmployeeById(key);
+			if(emp != null) {
+				List<Employee> team = manMap.get(key);
+				Manager manager = new Manager(emp,team); 
+				managerList.add(manager);
+			}
+		}
+		return managerList;
 	}
 
 }

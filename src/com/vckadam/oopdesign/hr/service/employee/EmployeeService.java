@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.vckadam.oopdesign.hr.model.Employee;
+import com.vckadam.oopdesign.hr.model.Manager;
 
 public interface EmployeeService {
 	public List<Employee> getemployeeWorkIn(String city) throws IOException, NumberFormatException, ParseException;
@@ -14,4 +15,5 @@ public interface EmployeeService {
 	public Map<String,Double> avgSalaryByJob() throws NumberFormatException, IOException, ParseException ;
 	public List<Employee> managerWithExperience(int year);
 	public List<Employee> deptInCountry(String country);
+	public List<Manager> getAllMangers();
 }
