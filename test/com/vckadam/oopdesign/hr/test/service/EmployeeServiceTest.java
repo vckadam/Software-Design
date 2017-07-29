@@ -237,10 +237,14 @@ public class EmployeeServiceTest {
 		
 		List<MinSalGradeEmp> actualList = this.employeeService.getEmployeeMinSal(employeeList, jobList);
 		
-		Set<Integer> actuEmpIdsInJob = prepareActulSet_testGetEmployeeMinSal(actualList, "JobId1");
+		Map<String,List<Integer>> actuEmpIdsInJob = prepareActulMap_testGetEmployeeMinSal(actualList);
 		//List<Integer> actualEmpsList = prepareEmpList_testGetEmployeeMinSal(actualList, "JobId1");
 		
-		Set<Integer> expectedIdsInJob = new HashSet<Integer>(Arrays.asList(1,3));
+		//Set<Integer> expectedIdsInJob = new HashSet<Integer>(Arrays.asList(1,3));
+		Map<String,List<Integer>> expectedIdsInJob = new HashMap<>();
+		expectedIdsInJob.put("JobId1", new ArrayList<Integer>(Arrays.asList(1,3)));
+		expectedIdsInJob.put("JobId2", new ArrayList<Integer>(Arrays.asList(2)));
+		
 		
 		//assertEquals(2, actualEmpsList.size());
 		assertEquals(expectedIdsInJob, actuEmpIdsInJob);
@@ -276,4 +280,22 @@ public class EmployeeServiceTest {
 		}
 		return set;
 	}
+	
+	private Map<String,List<Integer>> prepareActulMap_testGetEmployeeMinSal(List<MinSalGradeEmp> actualList) {
+		Map<String,List<Integer>> map = new HashMap<String,List<Integer>>();
+		for(MinSalGradeEmp jobGrp : actualList) {
+			if(jobGrp != null) {
+				List<Employee> emps = jobGrp.getEmps();
+				List<Integer> empIdList = new ArrayList<Integer>();
+				if(emps != null) {
+					for(Employee emp : emps) {
+						empIdList.add(emp.getEmpId());
+					}
+				}
+				map.put(jobGrp.getJob().getJobId(), empIdList);
+			}
+		}
+		return map;
+	}
+	
 }
