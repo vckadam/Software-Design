@@ -6,7 +6,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.vckadam.oopdesign.hr.model.Employee;
+import com.vckadam.oopdesign.hr.model.Job;
 import com.vckadam.oopdesign.hr.model.Manager;
+import com.vckadam.oopdesign.hr.model.MinSalGradeEmp;
 
 public interface EmployeeService {
 	public List<Employee> getemployeeWorkIn(String city) throws IOException, NumberFormatException, ParseException;
@@ -16,4 +18,5 @@ public interface EmployeeService {
 	public List<Employee> managerWithExperience(int year);
 	public List<Employee> deptInCountry(String country);
 	public List<Manager> getAllMangers();
+	public List<MinSalGradeEmp> getEmployeeMinSal(List<Employee> empList, List<Job> jobList);
 }

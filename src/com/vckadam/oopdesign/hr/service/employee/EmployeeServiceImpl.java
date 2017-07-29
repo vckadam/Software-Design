@@ -19,19 +19,23 @@ import com.vckadam.oopdesign.hr.dao.location.LocationDao;
 import com.vckadam.oopdesign.hr.dao.location.LocationDaoImpl;
 import com.vckadam.oopdesign.hr.model.Department;
 import com.vckadam.oopdesign.hr.model.Employee;
+import com.vckadam.oopdesign.hr.model.Job;
 import com.vckadam.oopdesign.hr.model.Location;
 import com.vckadam.oopdesign.hr.model.Manager;
+import com.vckadam.oopdesign.hr.model.MinSalGradeEmp;
 
 public class EmployeeServiceImpl implements EmployeeService {
 
 	private EmployeeDao employeeDao;
 	private DepartmentDao departmentDao;
 	private LocationDao locationDao;
+	private JobDao jobDao;
 	
 	public EmployeeServiceImpl() throws NumberFormatException, IOException, ParseException {
 		this.employeeDao = new EmployeeDaoImpl();
 		this.departmentDao = new DepartmentDaoImpl();
 		this.locationDao = new LocationDaoImpl();
+		this.jobDao = new JobDaoImpl();
 	}
 	
 	@Override
@@ -140,6 +144,41 @@ public class EmployeeServiceImpl implements EmployeeService {
 			}
 		}
 		return managerList;
+	}
+	
+	public List<MinSalGradeEmp> getEmpWithMinSalInJob() {
+		List<Employee> emps = this.employeeDao.getEmployeeList();
+		List<Job> jobs = this.jobDao.getJobList();
+		return this.getEmployeeMinSal(emps, jobs);
+	}
+	
+	public List<MinSalGradeEmp> getEmployeeMinSal(List<Employee> empList, List<Job> jobList) {
+		Map<String, MinSalGradeEmp> minSalEmp = new HashMap<>();
+		for(Job job : jobList) {
+			if(job != null) {
+				if(!minSalEmp.containsKey(job.getJobId())) {
+					minSalEmp.put(job.getJobId(), new MinSalGradeEmp(job,new ArrayList<Employee>()));
+				}
+			}
+		}
+		for(Employee emp : empList) {
+			if(emp != null) {
+				String empJobId = emp.getJobId();
+				if(empJobId != null) {
+					if(minSalEmp.containsKey(empJobId)) {
+						MinSalGradeEmp jobCatEmp = minSalEmp.get(empJobId);
+						if(emp.getSalary() == jobCatEmp.getJob().getMinSalary()) {
+							jobCatEmp.getEmps().add(emp);
+						}
+					}
+				}
+			}
+		}
+		List<MinSalGradeEmp> ret = new ArrayList<>();
+		for(String key : minSalEmp.keySet()) {
+			ret.add(minSalEmp.get(key));
+		}
+		return ret;
 	}
 
 }

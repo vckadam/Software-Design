@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -17,7 +18,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.vckadam.oopdesign.hr.model.Employee;
+import com.vckadam.oopdesign.hr.model.Job;
 import com.vckadam.oopdesign.hr.model.Manager;
+import com.vckadam.oopdesign.hr.model.MinSalGradeEmp;
 import com.vckadam.oopdesign.hr.service.employee.EmployeeService;
 import com.vckadam.oopdesign.hr.service.employee.EmployeeServiceImpl;
 
@@ -195,13 +198,7 @@ public class EmployeeServiceTest {
 	@Test
 	public void testGetAllMangers_OneEmployeeInTeam() {
 		List<Manager> managerList = this.employeeService.getAllMangers();
-		Set<Integer> actualTeam = new HashSet<Integer>();
-		for(Manager manager : managerList) {
-			if(manager.getManager().getEmpId() ==  102) {
-				List<Employee> team = manager.getTeam();
-				for(Employee emp : team) actualTeam.add(emp.getEmpId());
-			}
-		}
+		Set<Integer> actualTeam = prepareSet_TestGetAllMangers(managerList, 102);
 		
 		Set<Integer> expectedTeam = new HashSet<Integer>(Arrays.asList(103));
 		assertEquals(expectedTeam,actualTeam);
@@ -210,16 +207,73 @@ public class EmployeeServiceTest {
 	@Test
 	public void testGetAllMangers_multipleEmployeesInTeam() {
 		List<Manager> managerList = this.employeeService.getAllMangers();
-		Set<Integer> actualTeam = new HashSet<Integer>();
-		for(Manager manager : managerList) {
-			if(manager.getManager().getEmpId() ==  101) {
-				List<Employee> team = manager.getTeam();
-				for(Employee emp : team) actualTeam.add(emp.getEmpId());
-			}
-		}
+		Set<Integer> actualTeam = prepareSet_TestGetAllMangers(managerList, 101);
 		
 		Set<Integer> expectedTeam = new HashSet<Integer>(Arrays.asList(200, 203, 204, 205, 108));
 		assertEquals(expectedTeam,actualTeam);
 	}
 	
+	private Set<Integer> prepareSet_TestGetAllMangers(List<Manager> list, int managerId) {
+		Set<Integer> ret = new HashSet<Integer>();
+		for(Manager manager : list) {
+			if(manager.getManager().getEmpId() ==  managerId) {
+				List<Employee> team = manager.getTeam();
+				for(Employee emp : team) ret.add(emp.getEmpId());
+			}
+		}
+		return ret;	
+	}
+	
+	@Test
+	public void testGetEmployeeMinSal_PositiveScenario() {
+		int[] employeeIds = {1, 2, 3, 4 , 5};
+		double[] salary = {1000, 2000, 1000, 4000, 5000};
+		String[] empJobIds = {"JobId1", "JobId2","JobId1",  "JobId2", "JobId2"};
+		List<Employee> employeeList = prepareEmployeeList_testGetEmployeeMinSal(employeeIds,salary,empJobIds);
+		
+		String[] jobIds = {"JobId1", "JobId2"};
+		double[] minSal = {1000, 2000};
+		List<Job> jobList = prepareJobList_testGetEmployeeMinSal(jobIds,minSal);
+		
+		List<MinSalGradeEmp> actualList = this.employeeService.getEmployeeMinSal(employeeList, jobList);
+		
+		Set<Integer> actuEmpIdsInJob = prepareActulSet_testGetEmployeeMinSal(actualList, "JobId1");
+		//List<Integer> actualEmpsList = prepareEmpList_testGetEmployeeMinSal(actualList, "JobId1");
+		
+		Set<Integer> expectedIdsInJob = new HashSet<Integer>(Arrays.asList(1,3));
+		
+		//assertEquals(2, actualEmpsList.size());
+		assertEquals(expectedIdsInJob, actuEmpIdsInJob);
+	}
+	
+	private List<Employee> prepareEmployeeList_testGetEmployeeMinSal(int[] employeeIds, double[] salary, String[] empJobIds) {
+		List<Employee> empList = new ArrayList<Employee>();
+		for(int i = 0; i < employeeIds.length; i++) {
+			empList.add(new Employee(employeeIds[i],  null, null, null, null, null,	empJobIds[i], salary[i], 0.0, 0, 0));
+		}
+		return empList;
+	}
+	
+	private List<Job> prepareJobList_testGetEmployeeMinSal(String[] jobIds,double[] minSal){
+		List<Job> jobList = new ArrayList<Job>();
+		for(int i = 0; i < jobIds.length; i++) {
+			jobList.add(new Job(jobIds[i], null, 0.0, minSal[i]));
+		}
+		return jobList;
+	}
+	
+	private Set<Integer> prepareActulSet_testGetEmployeeMinSal(List<MinSalGradeEmp> actualList, String jobId) {
+		Set<Integer> set = new HashSet<Integer>();
+		for(MinSalGradeEmp jobGrp : actualList) {
+			if(jobGrp != null && jobGrp.getJob().getJobId().equals(jobId)) {
+				List<Employee> emps = jobGrp.getEmps();
+				if(emps != null) {
+					for(Employee emp : emps) {
+						set.add(emp.getEmpId());
+					}
+				}
+			}
+		}
+		return set;
+	}
 }
