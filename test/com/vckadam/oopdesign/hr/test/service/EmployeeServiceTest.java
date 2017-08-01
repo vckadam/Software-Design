@@ -17,8 +17,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.vckadam.oopdesign.hr.model.Department;
 import com.vckadam.oopdesign.hr.model.Employee;
+import com.vckadam.oopdesign.hr.model.EmployeeInCity;
 import com.vckadam.oopdesign.hr.model.Job;
+import com.vckadam.oopdesign.hr.model.Location;
 import com.vckadam.oopdesign.hr.model.Manager;
 import com.vckadam.oopdesign.hr.model.MinSalGradeEmp;
 import com.vckadam.oopdesign.hr.service.employee.EmployeeService;
@@ -36,6 +39,74 @@ public class EmployeeServiceTest {
 	@After
 	public void afterMethod() {
 		this.employeeService = null;
+	}
+	
+	@Test
+	public void testGetEmployeeInCity_PositiveScenario() {
+		int[] locIds = {1,2,3};
+		List<Location> locList = prepareLocList_TestGetEmployeeInCity(locIds);
+		int[][] deptToLocIds = {{1,1},{2,1},{3,2},{4,3}};
+		List<Department> deptList = prepareDeptList_TestGetEmployeeInCity(deptToLocIds);
+		int[][] empToDeptIds = {{1,1},{2,2},{3,3},{4,4}};
+		List<Employee> empList = prepareEmpList_TestGetEmployeeInCity(empToDeptIds);
+		List<EmployeeInCity> empsInCity = this.employeeService.getEmployeeInCity(empList, locList, deptList);
+		Map<Integer,List<Integer>> actualLocToEmpMap = prepareActualMap_TestGetEmployeeInCity(empsInCity);
+		
+		int[][] expectedLocToEmp = {{1,1},{1,2},{2,3},{3,4}};
+		Map<Integer,List<Integer>> expectedLocToEmpMap = prepareExpectedMap_TestGetEmployeeInCity(expectedLocToEmp);
+		
+		assertEquals(expectedLocToEmpMap, actualLocToEmpMap);
+	}
+	
+	private List<Location> prepareLocList_TestGetEmployeeInCity(int[] locIds) {
+		List<Location> locList = new ArrayList<Location>();
+		for(int locId : locIds) {
+			Location loc = new Location(locId, null, null, null, null, null);
+			locList.add(loc);
+		}
+		return locList;
+	}
+	
+	private List<Department> prepareDeptList_TestGetEmployeeInCity(int[][] deptIds) {
+		List<Department> deptList = new ArrayList<Department>();
+		for(int[] deptId : deptIds) {
+			Department dept = new Department(deptId[0], null, 0, deptId[1]);
+			deptList.add(dept);
+		}
+		return deptList;
+	}
+	
+	private List<Employee> prepareEmpList_TestGetEmployeeInCity(int[][] empIds) {
+		List<Employee> empList = new ArrayList<Employee>();
+		for(int[] empId : empIds) {
+			Employee emp = new Employee(empId[0],  null, null,null , null, null, 
+					null, 0.0, 0.0, 0, empId[1]);
+			empList.add(emp);
+		}
+		return empList;
+	}
+	
+	private Map<Integer,List<Integer>> prepareActualMap_TestGetEmployeeInCity(List<EmployeeInCity> empsInCity){
+		Map<Integer,List<Integer>> locToEmpMap = new HashMap<>();
+		for(EmployeeInCity empInCity : empsInCity) {
+			int locId = empInCity.getLocation().getLocationId();
+			List<Employee> emps = empInCity.getEmployeeList();
+			List<Integer> empIds = new ArrayList<Integer>();
+			for(Employee emp : emps) {
+				empIds.add(emp.getEmpId());
+			}
+			locToEmpMap.put(locId, empIds);
+		}
+		return locToEmpMap;
+	}
+	
+	private Map<Integer, List<Integer>> prepareExpectedMap_TestGetEmployeeInCity(int[][] locIdToEmpIds) {
+		Map<Integer,List<Integer>> locIdToEmpIdsMap = new HashMap<>();
+		for(int[] locIdToEmpId : locIdToEmpIds) {
+			if(!locIdToEmpIdsMap.containsKey(locIdToEmpId[0])) locIdToEmpIdsMap.put(locIdToEmpId[0], new ArrayList<Integer>());
+			locIdToEmpIdsMap.get(locIdToEmpId[0]).add(locIdToEmpId[1]);
+		}
+		return locIdToEmpIdsMap;
 	}
 	
 	/** If one or more employees work in given city.*/
@@ -92,11 +163,7 @@ public class EmployeeServiceTest {
 		
 	}
 	
-	@Test
-	public void managerWithExperienceTest1() {
-		List<Employee> actualList = this.employeeService.managerWithExperience(15);
-		assertEquals(11, actualList.size());
-	}
+	
 	
 	@Test
 	public void deptInCountryTest1() {

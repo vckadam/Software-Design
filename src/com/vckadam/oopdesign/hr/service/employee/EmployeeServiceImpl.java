@@ -19,6 +19,7 @@ import com.vckadam.oopdesign.hr.dao.location.LocationDao;
 import com.vckadam.oopdesign.hr.dao.location.LocationDaoImpl;
 import com.vckadam.oopdesign.hr.model.Department;
 import com.vckadam.oopdesign.hr.model.Employee;
+import com.vckadam.oopdesign.hr.model.EmployeeInCity;
 import com.vckadam.oopdesign.hr.model.Job;
 import com.vckadam.oopdesign.hr.model.Location;
 import com.vckadam.oopdesign.hr.model.Manager;
@@ -155,8 +156,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 	public List<MinSalGradeEmp> getEmployeeMinSal(List<Employee> empList, List<Job> jobList) {
 		if(empList == null || jobList == null) 
 			throw new IllegalArgumentException("Invalid Input");
-		List<Employee> currEmpList = new ArrayList<Employee>(empList);
-		List<Job> currJobList = new ArrayList<Job>(jobList);
+		List<Employee> currEmpList = new ArrayList<Employee>(empList); // Given arguments are "safe" now.
+		List<Job> currJobList = new ArrayList<Job>(jobList);   // Caller is free to modify returned value.
 		Map<String, MinSalGradeEmp> minSalEmp = new HashMap<>();
 		for(Job job : currJobList) {
 			if(job != null) {
@@ -185,6 +186,69 @@ public class EmployeeServiceImpl implements EmployeeService {
 				ret.add(curr);
 		}
 		return ret;
+	}
+
+	@Override
+	public List<EmployeeInCity> getEmployeeInCity(List<Employee> empList, List<Location> location, List<Department> depts) {
+		if(empList == null || location == null || depts == null || empList.size() == 0 || location.size() == 0 || depts.size() == 0)
+			throw new IllegalArgumentException("Illegal Argument empList: "+empList+" Location: "+location+" Departments: "+depts);
+		Map<Integer,List<Employee>> empDeptMap = new HashMap<>();
+		Map<Integer,List<Department>> deptLocMap = new HashMap<>();
+		Map<Integer,List<Employee>> empLocMap = new HashMap<>();
+		Map<Integer,Location> locMap = new HashMap<>();
+		List<Employee> tempEmpList = new ArrayList<Employee>(empList);
+		List<Location> tempLocList = new ArrayList<Location>(location);
+		List<Department> tempDeptList = new ArrayList<Department>(depts);
+		for(Employee emp : tempEmpList) {
+			if(emp != null) {
+				Integer deptId = emp.getDepartmentId();
+				if(!empDeptMap.containsKey(deptId)) empDeptMap.put(deptId, new ArrayList<Employee>());
+				empDeptMap.get(deptId).add(emp);
+			}
+		}
+		for(Department dept : tempDeptList) {
+			if(dept != null) {
+				Integer locId = dept.getLocationId();
+				if(!deptLocMap.containsKey(locId)) deptLocMap.put(locId, new ArrayList<Department>());
+				deptLocMap.get(locId).add(dept);
+			}
+		}
+		for(Integer locId : deptLocMap.keySet()) {
+			List<Department> currDepts = deptLocMap.get(locId);
+			if(currDepts != null) {
+				for(Department dept : currDepts) {
+					if(dept != null) {
+						Integer currDeptId = dept.getDeparmentId();
+						List<Employee> currDeptEmp = empDeptMap.get(currDeptId);
+						if(currDeptEmp != null) {
+							if(!empLocMap.containsKey(locId)) empLocMap.put(locId, new ArrayList<Employee>());
+							empLocMap.get(locId).addAll(currDeptEmp);
+						}
+					}
+				}
+			}
+		}
+		for(Location loc : tempLocList) {
+			if(!locMap.containsKey(loc.getLocationId())) locMap.put(loc.getLocationId(), loc);
+		}
+		
+		List<EmployeeInCity> employeesInCityList = new ArrayList<EmployeeInCity>();
+		for(Integer locId : empLocMap.keySet()) {
+			Location currLoc = locMap.get(locId);
+			if(currLoc != null) {
+				List<Employee> locEmps = empLocMap.get(locId);
+				if(locEmps.size() > 0) {
+					EmployeeInCity currCity = new EmployeeInCity(currLoc, locEmps);
+					employeesInCityList.add(currCity);
+				}
+			}
+		}
+		return employeesInCityList;
+	}
+
+	@Override
+	public List<EmployeeInCity> getEmployeeInCityOnData() {
+		return this.getEmployeeInCity(this.employeeDao.getEmployeeList(), this.locationDao.getLocationList(), this.departmentDao.getDepartmentList());
 	}
 
 }

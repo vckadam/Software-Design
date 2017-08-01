@@ -5,8 +5,11 @@ import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
+import com.vckadam.oopdesign.hr.model.Department;
 import com.vckadam.oopdesign.hr.model.Employee;
+import com.vckadam.oopdesign.hr.model.EmployeeInCity;
 import com.vckadam.oopdesign.hr.model.Job;
+import com.vckadam.oopdesign.hr.model.Location;
 import com.vckadam.oopdesign.hr.model.Manager;
 import com.vckadam.oopdesign.hr.model.MinSalGradeEmp;
 
@@ -19,4 +22,6 @@ public interface EmployeeService {
 	public List<Employee> deptInCountry(String country);
 	public List<Manager> getAllMangers();
 	public List<MinSalGradeEmp> getEmployeeMinSal(List<Employee> empList, List<Job> jobList);
+	public List<EmployeeInCity> getEmployeeInCity(List<Employee> empList, List<Location> location, List<Department> depts);
+	public List<EmployeeInCity> getEmployeeInCityOnData();
 }
