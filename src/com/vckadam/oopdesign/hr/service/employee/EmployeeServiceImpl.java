@@ -199,18 +199,26 @@ public class EmployeeServiceImpl implements EmployeeService {
 		List<Employee> tempEmpList = new ArrayList<Employee>(empList);
 		List<Location> tempLocList = new ArrayList<Location>(location);
 		List<Department> tempDeptList = new ArrayList<Department>(depts);
+		Set<String> empSet = new HashSet<String>();
+		Set<String> deptSet = new HashSet<String>();
 		for(Employee emp : tempEmpList) {
 			if(emp != null) {
 				Integer deptId = emp.getDepartmentId();
-				if(!empDeptMap.containsKey(deptId)) empDeptMap.put(deptId, new ArrayList<Employee>());
-				empDeptMap.get(deptId).add(emp);
+				if(!empSet.contains(emp.getEmpId()+"#"+deptId)) {
+					if(!empDeptMap.containsKey(deptId)) empDeptMap.put(deptId, new ArrayList<Employee>());
+					empDeptMap.get(deptId).add(emp);
+					empSet.add(emp.getEmpId()+"#"+deptId);
+				}
 			}
 		}
 		for(Department dept : tempDeptList) {
 			if(dept != null) {
 				Integer locId = dept.getLocationId();
-				if(!deptLocMap.containsKey(locId)) deptLocMap.put(locId, new ArrayList<Department>());
-				deptLocMap.get(locId).add(dept);
+				if(!deptSet.contains(dept.getDeparmentId()+"#"+locId)) {
+					if(!deptLocMap.containsKey(locId)) deptLocMap.put(locId, new ArrayList<Department>());
+					deptLocMap.get(locId).add(dept);
+					deptSet.add(dept.getDeparmentId()+"#"+locId);
+				}
 			}
 		}
 		for(Integer locId : deptLocMap.keySet()) {
@@ -229,7 +237,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 			}
 		}
 		for(Location loc : tempLocList) {
-			if(!locMap.containsKey(loc.getLocationId())) locMap.put(loc.getLocationId(), loc);
+			if(loc != null && !locMap.containsKey(loc.getLocationId())) locMap.put(loc.getLocationId(), loc);
 		}
 		
 		List<EmployeeInCity> employeesInCityList = new ArrayList<EmployeeInCity>();
@@ -264,7 +272,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 		List<EmployeeInCity> emps = new ArrayList<EmployeeInCity>();
 		List<EmployeeInCity> tempEmpInCityList = new ArrayList<>(empList);
 		for(EmployeeInCity empInCity : tempEmpInCityList) {
-			if(empInCity != null) {
+			if(empInCity != null && empInCity.getLocation() != null && empInCity.getEmployeeList() != null) {
 				double cityAvgSal = 0;
 				List<Employee> tempEmpList = empInCity.getEmployeeList();
 				if(tempEmpList != null && tempEmpList.size() > 0) {

@@ -59,6 +59,96 @@ public class EmployeeServiceTest {
 		assertEquals(expectedEmpsMoreThanAvgMap, actualEmpsMoreThanAvgMap);
 	}
 	
+	
+	@Test
+	public void testMoreThanAvgSalInCity_NoEmpsForLoc() {
+		int[] locsId = {1,2,3}; //No employee for locId 3
+		int[][] empsIdWithSalLocId1 = {{1,100},{2,200},{3,300}};
+		int[][] empsIdWithSalLocId2 = {{4,400},{5,500}};
+		List<EmployeeInCity> empsInCity = prepareEmpInCity_testMoreThanAvgSalInCity(locsId, empsIdWithSalLocId1, empsIdWithSalLocId2);
+		List<EmployeeInCity> actualEmpsMoreThanAvg = this.employeeService.moreThanAvgSalInCity(empsInCity);
+		
+		Map<Integer,List<Integer>> actualEmpsMoreThanAvgMap = prepareActualMap_testMoreThanAvgSalInCity(actualEmpsMoreThanAvg);
+		
+		int[][] expectedLocIdToEmp = {{1,3},{2,5}};
+		Map<Integer,List<Integer>> expectedEmpsMoreThanAvgMap = prepareExpectedMap_testMoreThanAvgSalInCity(expectedLocIdToEmp);
+		
+		assertEquals(expectedEmpsMoreThanAvgMap.size(), actualEmpsMoreThanAvg.size());
+		assertEquals(expectedEmpsMoreThanAvgMap, actualEmpsMoreThanAvgMap);
+	}
+	
+	@Test
+	public void testMoreThanAvgSalInCity_NullEmployeeInCity() {
+		int[] locsId = {1,2,3};
+		int[][] empsIdWithSalLocId1 = {{1,100},{2,200},{3,300}};
+		int[][] empsIdWithSalLocId2 = {{4,400},{5,500}};
+		List<EmployeeInCity> empsInCity = prepareEmpInCity_testMoreThanAvgSalInCity(locsId, empsIdWithSalLocId1, empsIdWithSalLocId2);
+		empsInCity.add(null);
+		List<EmployeeInCity> actualEmpsMoreThanAvg = this.employeeService.moreThanAvgSalInCity(empsInCity);
+		
+		Map<Integer,List<Integer>> actualEmpsMoreThanAvgMap = prepareActualMap_testMoreThanAvgSalInCity(actualEmpsMoreThanAvg);
+		
+		int[][] expectedLocIdToEmp = {{1,3},{2,5}};
+		Map<Integer,List<Integer>> expectedEmpsMoreThanAvgMap = prepareExpectedMap_testMoreThanAvgSalInCity(expectedLocIdToEmp);
+		
+		assertEquals(expectedEmpsMoreThanAvgMap.size(), actualEmpsMoreThanAvg.size());
+		assertEquals(expectedEmpsMoreThanAvgMap, actualEmpsMoreThanAvgMap);
+	}
+	
+	@Test
+	public void testMoreThanAvgSalInCity_NullLocInEmployeeInCity() {
+		int[] locsId = {1,2,3};
+		int[][] empsIdWithSalLocId1 = {{1,100},{2,200},{3,300}};
+		int[][] empsIdWithSalLocId2 = {{4,400},{5,500}};
+		List<EmployeeInCity> empsInCity = prepareEmpInCity_testMoreThanAvgSalInCity(locsId, empsIdWithSalLocId1, empsIdWithSalLocId2);
+		empsInCity.add(new EmployeeInCity(null, empsInCity.get(0).getEmployeeList()));
+		List<EmployeeInCity> actualEmpsMoreThanAvg = this.employeeService.moreThanAvgSalInCity(empsInCity);
+		
+		Map<Integer,List<Integer>> actualEmpsMoreThanAvgMap = prepareActualMap_testMoreThanAvgSalInCity(actualEmpsMoreThanAvg);
+		
+		int[][] expectedLocIdToEmp = {{1,3},{2,5}};
+		Map<Integer,List<Integer>> expectedEmpsMoreThanAvgMap = prepareExpectedMap_testMoreThanAvgSalInCity(expectedLocIdToEmp);
+		
+		assertEquals(expectedEmpsMoreThanAvgMap.size(), actualEmpsMoreThanAvg.size());
+		assertEquals(expectedEmpsMoreThanAvgMap, actualEmpsMoreThanAvgMap);
+	}
+	
+	@Test
+	public void testMoreThanAvgSalInCity_NullEmpListInEmployeeInCity() {
+		int[] locsId = {1,2,3};
+		int[][] empsIdWithSalLocId1 = {{1,100},{2,200},{3,300}};
+		int[][] empsIdWithSalLocId2 = {{4,400},{5,500}};
+		List<EmployeeInCity> empsInCity = prepareEmpInCity_testMoreThanAvgSalInCity(locsId, empsIdWithSalLocId1, empsIdWithSalLocId2);
+		empsInCity.add(new EmployeeInCity(empsInCity.get(0).getLocation(),null));
+		List<EmployeeInCity> actualEmpsMoreThanAvg = this.employeeService.moreThanAvgSalInCity(empsInCity);
+		
+		Map<Integer,List<Integer>> actualEmpsMoreThanAvgMap = prepareActualMap_testMoreThanAvgSalInCity(actualEmpsMoreThanAvg);
+		
+		int[][] expectedLocIdToEmp = {{1,3},{2,5}};
+		Map<Integer,List<Integer>> expectedEmpsMoreThanAvgMap = prepareExpectedMap_testMoreThanAvgSalInCity(expectedLocIdToEmp);
+		
+		assertEquals(expectedEmpsMoreThanAvgMap.size(), actualEmpsMoreThanAvg.size());
+		assertEquals(expectedEmpsMoreThanAvgMap, actualEmpsMoreThanAvgMap);
+	}
+	
+	@Test
+	public void testMoreThanAvgSalInCity_NullEmpListAndLocInEmployeeInCity() {
+		int[] locsId = {1,2,3};
+		int[][] empsIdWithSalLocId1 = {{1,100},{2,200},{3,300}};
+		int[][] empsIdWithSalLocId2 = {{4,400},{5,500}};
+		List<EmployeeInCity> empsInCity = prepareEmpInCity_testMoreThanAvgSalInCity(locsId, empsIdWithSalLocId1, empsIdWithSalLocId2);
+		empsInCity.add(new EmployeeInCity(null,null));
+		List<EmployeeInCity> actualEmpsMoreThanAvg = this.employeeService.moreThanAvgSalInCity(empsInCity);
+		
+		Map<Integer,List<Integer>> actualEmpsMoreThanAvgMap = prepareActualMap_testMoreThanAvgSalInCity(actualEmpsMoreThanAvg);
+		
+		int[][] expectedLocIdToEmp = {{1,3},{2,5}};
+		Map<Integer,List<Integer>> expectedEmpsMoreThanAvgMap = prepareExpectedMap_testMoreThanAvgSalInCity(expectedLocIdToEmp);
+		
+		assertEquals(expectedEmpsMoreThanAvgMap.size(), actualEmpsMoreThanAvg.size());
+		assertEquals(expectedEmpsMoreThanAvgMap, actualEmpsMoreThanAvgMap);
+	}
+	
 	private Map<Integer,List<Integer>> prepareExpectedMap_testMoreThanAvgSalInCity(int[][] locIdToEmpIds) {
 		Map<Integer,List<Integer>> locIdToEmpIdMap = new HashMap<>();
 		for(int[] locIdToEmpId : locIdToEmpIds) {
@@ -71,11 +161,15 @@ public class EmployeeServiceTest {
 	private Map<Integer,List<Integer>> prepareActualMap_testMoreThanAvgSalInCity(List<EmployeeInCity> empsInCity) {
 		Map<Integer,List<Integer>> locIdToEmpIdMap = new HashMap<>();
 		for(EmployeeInCity empInCity : empsInCity) {
-			int locId = empInCity.getLocation().getLocationId();
-			if(!locIdToEmpIdMap.containsKey(locId)) locIdToEmpIdMap.put(locId, new ArrayList<Integer>());
-			List<Employee> emps = empInCity.getEmployeeList();
-			for(Employee emp : emps) {
-				locIdToEmpIdMap.get(locId).add(emp.getEmpId());
+			if(empInCity != null) {
+				if(empInCity.getLocation() != null) {
+					int locId = empInCity.getLocation().getLocationId();
+					if(!locIdToEmpIdMap.containsKey(locId)) locIdToEmpIdMap.put(locId, new ArrayList<Integer>());
+					List<Employee> emps = empInCity.getEmployeeList();
+					for(Employee emp : emps) {
+						locIdToEmpIdMap.get(locId).add(emp.getEmpId());
+					}
+				}
 			}
 		}
 		return locIdToEmpIdMap;
@@ -111,6 +205,21 @@ public class EmployeeServiceTest {
 		Set<Integer> actualEmpSet = prepareActualSet_testGetMoreThanAvg(actualEmpList);
 		
 		List<Integer> expected = new ArrayList<Integer>(Arrays.asList(3,4,5));
+		Set<Integer> expectedEmpSet = new HashSet<Integer>(expected);
+		
+		assertEquals(expectedEmpSet.size(), actualEmpList.size());
+		assertEquals(expectedEmpSet, actualEmpSet);
+		
+	}
+	
+	@Test
+	public void testGetMoreThanAvg_AvoidEqualSal() {
+		int[][] empIdWithSal = {{1,100},{2,200},{3,300},{4,400},{5,500}};
+		List<Employee> emps = prepareEmpList_testGetMoreThanAvg(empIdWithSal);
+		List<Employee> actualEmpList = this.employeeService.getMoreThanAvg(emps, 300);
+		Set<Integer> actualEmpSet = prepareActualSet_testGetMoreThanAvg(actualEmpList);
+		
+		List<Integer> expected = new ArrayList<Integer>(Arrays.asList(4,5));
 		Set<Integer> expectedEmpSet = new HashSet<Integer>(expected);
 		
 		assertEquals(expectedEmpSet.size(), actualEmpList.size());
@@ -154,6 +263,77 @@ public class EmployeeServiceTest {
 	}
 	
 	@Test
+	public void testGetEmployeeInCity_NullLocListElement() {
+		int[] locIds = {1,2,3};
+		List<Location> locList = prepareLocList_TestGetEmployeeInCity(locIds);
+		locList.add(null);
+		int[][] deptToLocIds = {{1,1},{2,1},{3,2},{4,3}};
+		List<Department> deptList = prepareDeptList_TestGetEmployeeInCity(deptToLocIds);
+		int[][] empToDeptIds = {{1,1},{2,2},{3,3},{4,4}};
+		List<Employee> empList = prepareEmpList_TestGetEmployeeInCity(empToDeptIds);
+		List<EmployeeInCity> empsInCity = this.employeeService.getEmployeeInCity(empList, locList, deptList);
+		Map<Integer,List<Integer>> actualLocToEmpMap = prepareActualMap_TestGetEmployeeInCity(empsInCity);
+		
+		int[][] expectedLocToEmp = {{1,1},{1,2},{2,3},{3,4}};
+		Map<Integer,List<Integer>> expectedLocToEmpMap = prepareExpectedMap_TestGetEmployeeInCity(expectedLocToEmp);
+		
+		assertEquals(expectedLocToEmpMap, actualLocToEmpMap);
+	}
+	
+	@Test
+	public void testGetEmployeeInCity_NullDeptListElement() {
+		int[] locIds = {1,2,3};
+		List<Location> locList = prepareLocList_TestGetEmployeeInCity(locIds);
+		int[][] deptToLocIds = {{1,1},{2,1},{3,2},{4,3}};
+		List<Department> deptList = prepareDeptList_TestGetEmployeeInCity(deptToLocIds);
+		deptList.add(null);
+		int[][] empToDeptIds = {{1,1},{2,2},{3,3},{4,4}};
+		List<Employee> empList = prepareEmpList_TestGetEmployeeInCity(empToDeptIds);
+		List<EmployeeInCity> empsInCity = this.employeeService.getEmployeeInCity(empList, locList, deptList);
+		Map<Integer,List<Integer>> actualLocToEmpMap = prepareActualMap_TestGetEmployeeInCity(empsInCity);
+		
+		int[][] expectedLocToEmp = {{1,1},{1,2},{2,3},{3,4}};
+		Map<Integer,List<Integer>> expectedLocToEmpMap = prepareExpectedMap_TestGetEmployeeInCity(expectedLocToEmp);
+		
+		assertEquals(expectedLocToEmpMap, actualLocToEmpMap);
+	}
+	
+	@Test
+	public void testGetEmployeeInCity_NullEmpListElement() {
+		int[] locIds = {1,2,3};
+		List<Location> locList = prepareLocList_TestGetEmployeeInCity(locIds);
+		int[][] deptToLocIds = {{1,1},{2,1},{3,2},{4,3}};
+		List<Department> deptList = prepareDeptList_TestGetEmployeeInCity(deptToLocIds);
+		int[][] empToDeptIds = {{1,1},{2,2},{3,3},{4,4}};
+		List<Employee> empList = prepareEmpList_TestGetEmployeeInCity(empToDeptIds);
+		empList.add(null);
+		List<EmployeeInCity> empsInCity = this.employeeService.getEmployeeInCity(empList, locList, deptList);
+		Map<Integer,List<Integer>> actualLocToEmpMap = prepareActualMap_TestGetEmployeeInCity(empsInCity);
+		
+		int[][] expectedLocToEmp = {{1,1},{1,2},{2,3},{3,4}};
+		Map<Integer,List<Integer>> expectedLocToEmpMap = prepareExpectedMap_TestGetEmployeeInCity(expectedLocToEmp);
+		
+		assertEquals(expectedLocToEmpMap, actualLocToEmpMap);
+	}
+	
+	@Test
+	public void testGetEmployeeInCity_AvoidDuplicate() {
+		int[] locIds = {1,2,3,3};
+		List<Location> locList = prepareLocList_TestGetEmployeeInCity(locIds);
+		int[][] deptToLocIds = {{1,1},{2,1},{3,2},{4,3},{4,3}};
+		List<Department> deptList = prepareDeptList_TestGetEmployeeInCity(deptToLocIds);
+		int[][] empToDeptIds = {{1,1},{2,2},{3,3},{4,4},{4,4}};
+		List<Employee> empList = prepareEmpList_TestGetEmployeeInCity(empToDeptIds);
+		List<EmployeeInCity> empsInCity = this.employeeService.getEmployeeInCity(empList, locList, deptList);
+		Map<Integer,List<Integer>> actualLocToEmpMap = prepareActualMap_TestGetEmployeeInCity(empsInCity);
+		
+		int[][] expectedLocToEmp = {{1,1},{1,2},{2,3},{3,4}};
+		Map<Integer,List<Integer>> expectedLocToEmpMap = prepareExpectedMap_TestGetEmployeeInCity(expectedLocToEmp);
+		
+		assertEquals(expectedLocToEmpMap, actualLocToEmpMap);
+	}
+	
+	@Test
 	public void testGetEmployeeInCity_LocWithoutEmps() {
 		int[] locIds = {1,2,3,5 }; //5 location is without employees
 		List<Location> locList = prepareLocList_TestGetEmployeeInCity(locIds);
@@ -172,7 +352,7 @@ public class EmployeeServiceTest {
 	
 	@Test
 	public void testGetEmployeeInCity_DeptWithoutValidLoc() {
-		int[] locIds = {1,2,3,};
+		int[] locIds = {1,2,3};
 		List<Location> locList = prepareLocList_TestGetEmployeeInCity(locIds);
 		int[][] deptToLocIds = {{1,1},{2,1},{3,2},{4,3},{5,5}}; //5 locId is invalid.
 		List<Department> deptList = prepareDeptList_TestGetEmployeeInCity(deptToLocIds);
