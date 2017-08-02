@@ -251,4 +251,56 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return this.getEmployeeInCity(this.employeeDao.getEmployeeList(), this.locationDao.getLocationList(), this.departmentDao.getDepartmentList());
 	}
 
+	@Override
+	public List<EmployeeInCity> moreThanAvgSalInCity() {
+		List<EmployeeInCity> empList = getEmployeeInCityOnData();
+		return moreThanAvgSalInCity(empList);
+	}
+
+	@Override
+	public List<EmployeeInCity> moreThanAvgSalInCity(List<EmployeeInCity> empList) {
+		if (empList==null || empList.size()==0)
+			throw new IllegalArgumentException(expectionString(empList));
+		List<EmployeeInCity> emps = new ArrayList<EmployeeInCity>();
+		List<EmployeeInCity> tempEmpInCityList = new ArrayList<>(empList);
+		for(EmployeeInCity empInCity : tempEmpInCityList) {
+			if(empInCity != null) {
+				double cityAvgSal = 0;
+				List<Employee> tempEmpList = empInCity.getEmployeeList();
+				if(tempEmpList != null && tempEmpList.size() > 0) {
+					for(Employee emp : tempEmpList) {
+						cityAvgSal += emp.getSalary();
+					}
+					cityAvgSal /= tempEmpList.size();
+					List<Employee> moreAvgEmps = getMoreThanAvg(tempEmpList, cityAvgSal);
+					empInCity.setEmployeeList(moreAvgEmps);
+					emps.add(empInCity);
+				}
+			}
+			
+		}
+		return emps;
+	}
+	
+	public List<Employee> getMoreThanAvg(List<Employee> tempEmpList, double avgSal) {
+		int j = 0;
+		for(int i = 0; i < tempEmpList.size(); i++) {
+			if(tempEmpList.get(i).getSalary() > avgSal) swap(i, j++, tempEmpList);
+		}
+		for(int i = tempEmpList.size()-1; i >= j; i--) {
+			tempEmpList.remove(tempEmpList.size()-1);
+		}
+		return tempEmpList;
+	}
+	
+	public void swap(int i, int j, List<Employee> empList) {
+		Employee emp1 = empList.get(i);
+		empList.set(i, empList.get(j));
+		empList.set(j, emp1);
+	}
+	
+	private String expectionString(List<EmployeeInCity> empList) {
+		return "Illegal Argumnet empList: "+empList;
+	}
+
 }

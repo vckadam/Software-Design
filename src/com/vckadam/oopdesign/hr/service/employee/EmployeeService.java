@@ -24,4 +24,7 @@ public interface EmployeeService {
 	public List<MinSalGradeEmp> getEmployeeMinSal(List<Employee> empList, List<Job> jobList);
 	public List<EmployeeInCity> getEmployeeInCity(List<Employee> empList, List<Location> location, List<Department> depts);
 	public List<EmployeeInCity> getEmployeeInCityOnData();
+	public List<EmployeeInCity> moreThanAvgSalInCity();
+	public List<EmployeeInCity> moreThanAvgSalInCity(List<EmployeeInCity> empList);
+	public List<Employee> getMoreThanAvg(List<Employee> tempEmpList, double avgSal);
 }
