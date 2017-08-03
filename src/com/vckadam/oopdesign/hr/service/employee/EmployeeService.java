@@ -27,4 +27,6 @@ public interface EmployeeService {
 	public List<EmployeeInCity> moreThanAvgSalInCity();
 	public List<EmployeeInCity> moreThanAvgSalInCity(List<EmployeeInCity> empList);
 	public List<Employee> getMoreThanAvg(List<Employee> tempEmpList, double avgSal);
+	
 }
+   
