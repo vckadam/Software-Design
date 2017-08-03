@@ -15,6 +15,8 @@ import org.junit.Test;
 import com.vckadam.oopdesign.hr.model.Country;
 import com.vckadam.oopdesign.hr.model.Department;
 import com.vckadam.oopdesign.hr.model.DepartmentsByCountry;
+import com.vckadam.oopdesign.hr.model.Employee;
+import com.vckadam.oopdesign.hr.model.ExpensiveDeptInCoun;
 import com.vckadam.oopdesign.hr.model.Location;
 import com.vckadam.oopdesign.hr.service.department.DepartmentService;
 import com.vckadam.oopdesign.hr.service.department.DepartmentServiceImpl;
@@ -31,6 +33,74 @@ public class DepartmentServiceTest {
 	public void tearDown() throws Exception {
 		this.departmentService = null;
 	}
+	
+	@Test
+	public void getExpensiveDeptInCountry_PositiveScenario() {
+		Object[][] deptIdsInCoun = {{"abc",Arrays.asList(1,2)},{"bcc",Arrays.asList(4,5)}};
+		List<DepartmentsByCountry> deptsByConList = prepListForGetExpensiveDeptInCountry(deptIdsInCoun);
+		Object[][] empIdDeptIdSal = {{1,1,2000.0}, {2,1,2000.0}, {3,2,2000.0}, {4,4,2000.0}, {5,5,2000.0}, {6,5,2000.0}};
+		List<Employee> empList = prepEmpListForGetExpensiveDeptInCountry(empIdDeptIdSal);
+		List<ExpensiveDeptInCoun> actualList = this.departmentService.getExpensiveDeptInCountry(deptsByConList, empList);
+		Map<String,Integer> actaulCounIdToDeptIdMap = prepActualMapForGetExpensiveDeptInCountry(actualList);
+		
+		Object[][] expectedCounIdToDeptId = {{"abc",1},{"bcc",5}};
+		Map<String,Integer> expectedCounIdToDeptIdMap = prepexpectedMapForGetExpensiveDeptInCountry(expectedCounIdToDeptId);
+		
+		assertEquals(expectedCounIdToDeptIdMap.size(), actualList.size());
+		assertEquals(expectedCounIdToDeptIdMap, actaulCounIdToDeptIdMap);
+	}
+	
+	@SuppressWarnings("unchecked")
+	private List<DepartmentsByCountry> prepListForGetExpensiveDeptInCountry(Object[][] deptIdsInCoun) {
+		List<DepartmentsByCountry> deptsByCounList = new ArrayList<>();
+		for(Object[] deptIdInCoun : deptIdsInCoun) {
+			if(deptIdInCoun != null) {
+				Country coun = new Country((String)deptIdInCoun[0], null, 0);
+				List<Department> deptList = new ArrayList<>();
+				List<Integer> deptIds = (List<Integer>)deptIdInCoun[1];
+				if(deptIds != null) {
+					for(Integer currDeptId : deptIds) {
+						Department currDept = new Department(currDeptId, null, 0, 0);
+						deptList.add(currDept);
+					}
+					deptsByCounList.add(new DepartmentsByCountry(coun,deptList));
+				}
+				else deptsByCounList.add(new DepartmentsByCountry(coun,null));
+			}
+			else 
+				deptsByCounList.add(null);
+		}
+		return deptsByCounList;
+	}
+	
+	private List<Employee> prepEmpListForGetExpensiveDeptInCountry(Object[][] empIdDeptIdSals) {
+		List<Employee> emps = new ArrayList<>();
+		for(Object[] empIdDeptIdSal : empIdDeptIdSals) {
+			if(empIdDeptIdSal != null) {
+				emps.add(new Employee((int)empIdDeptIdSal[0], null, null, null, null, null, 
+			null, (double)empIdDeptIdSal[2], 0.0, 0, (int)empIdDeptIdSal[1]));
+			}
+		}
+		return emps;
+	}
+	
+	private Map<String,Integer> prepActualMapForGetExpensiveDeptInCountry(List<ExpensiveDeptInCoun> actualList) {
+		Map<String,Integer> counIdToDeptId = new HashMap<>();
+		for(ExpensiveDeptInCoun ele : actualList) {
+			counIdToDeptId.put(ele.getCountry().getCountryId(),ele.getDeptment().getDeparmentId());
+		}
+		return counIdToDeptId;
+	}
+	
+	private Map<String,Integer> prepexpectedMapForGetExpensiveDeptInCountry(Object[][] counIdToDeptIds) {
+		Map<String,Integer> counIdToDeptIdMap = new HashMap<>();
+		for(Object[] ele : counIdToDeptIds) {
+			counIdToDeptIdMap.put((String)ele[0], (int)ele[1]);
+		}
+		return counIdToDeptIdMap;
+	}
+	
+	/*-----------------------------------------------------------*/
 
 	@Test
 	public void testGetAllDeptByCoun_PositiveScenario() {
