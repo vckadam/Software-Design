@@ -15,8 +15,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.vckadam.oopdesign.NorthWind.model.Category;
 import com.vckadam.oopdesign.NorthWind.model.Product;
 import com.vckadam.oopdesign.NorthWind.model.ProductsBySupplier;
+import com.vckadam.oopdesign.NorthWind.model.ProductsInCat;
 import com.vckadam.oopdesign.NorthWind.model.Supplier;
 import com.vckadam.oopdesign.NorthWind.service.Service;
 import com.vckadam.oopdesign.NorthWind.service.ServiceImpl;
@@ -33,6 +35,154 @@ public class ServiceImplTest {
 	public void afterMethod() {
 		this.service = null;
 	}
+	
+	@Test
+	public void testGetProductsInCategory_PositiveScenario() {
+		int[] catIds = {1,2,3,4};
+		List<Category> cats = prepCatListForTestGetProductsInCategory(catIds);
+		int[][] prodIdToCatId = {{1,1},{2,1},{3,3},{4,4},{5,2},{6,2},{7,3}};
+		List<Product> prods = prepProdListForTestGetProductsInCategory(prodIdToCatId);
+		List<ProductsInCat> actualCatToProd = this.service.getProductsInCategory(cats, prods);
+		Map<Integer,List<Integer>> actualCatIdToProdIdsMap = prepActualMapTestGetProductsInCategory(actualCatToProd);
+		
+		Object[][] expectedCatIdToProdIds = {{1,Arrays.asList(1,2)},{2,Arrays.asList(5,6)},{3,Arrays.asList(3,7)},{4,Arrays.asList(4)}};
+		Map<Integer,List<Integer>> expectedCatIdToProdIdsMap = prepExpectedMapTestGetProductsInCategory(expectedCatIdToProdIds);
+		assertEquals(expectedCatIdToProdIdsMap.size(), actualCatToProd.size());
+		assertEquals(expectedCatIdToProdIdsMap, actualCatIdToProdIdsMap);
+		
+	}
+	
+	@Test
+	public void testGetProductsInCategory_NullProducts() {
+		int[] catIds = {1,2,3,4};
+		List<Category> cats = prepCatListForTestGetProductsInCategory(catIds);
+		int[][] prodIdToCatId = {{1,1},{2,1},null,{3,3},null,{4,4},{5,2},{6,2},{7,3}};
+		List<Product> prods = prepProdListForTestGetProductsInCategory(prodIdToCatId);
+		List<ProductsInCat> actualCatToProd = this.service.getProductsInCategory(cats, prods);
+		Map<Integer,List<Integer>> actualCatIdToProdIdsMap = prepActualMapTestGetProductsInCategory(actualCatToProd);
+		
+		Object[][] expectedCatIdToProdIds = {{1,Arrays.asList(1,2)},{2,Arrays.asList(5,6)},{3,Arrays.asList(3,7)},{4,Arrays.asList(4)}};
+		Map<Integer,List<Integer>> expectedCatIdToProdIdsMap = prepExpectedMapTestGetProductsInCategory(expectedCatIdToProdIds);
+		assertEquals(expectedCatIdToProdIdsMap.size(), actualCatToProd.size());
+		assertEquals(expectedCatIdToProdIdsMap, actualCatIdToProdIdsMap);
+		
+	}
+	
+	@Test
+	public void testGetProductsInCategory_ExtraCategories() {
+		int[] catIds = {1,2,3,4,5,6,7,8}; //No products in cat 5,6,7,8
+		List<Category> cats = prepCatListForTestGetProductsInCategory(catIds);
+		int[][] prodIdToCatId = {{1,1},{2,1},null,{3,3},null,{4,4},{5,2},{6,2},{7,3}};
+		List<Product> prods = prepProdListForTestGetProductsInCategory(prodIdToCatId);
+		List<ProductsInCat> actualCatToProd = this.service.getProductsInCategory(cats, prods);
+		Map<Integer,List<Integer>> actualCatIdToProdIdsMap = prepActualMapTestGetProductsInCategory(actualCatToProd);
+		
+		Object[][] expectedCatIdToProdIds = {{1,Arrays.asList(1,2)},{2,Arrays.asList(5,6)},{3,Arrays.asList(3,7)},{4,Arrays.asList(4)}};
+		Map<Integer,List<Integer>> expectedCatIdToProdIdsMap = prepExpectedMapTestGetProductsInCategory(expectedCatIdToProdIds);
+		assertEquals(expectedCatIdToProdIdsMap.size(), actualCatToProd.size());
+		assertEquals(expectedCatIdToProdIdsMap, actualCatIdToProdIdsMap);
+		
+	}
+	
+	@Test
+	public void testGetProductsInCategory_ProductsWithInvalidCat() {
+		int[] catIds = {1,2,3,4};
+		List<Category> cats = prepCatListForTestGetProductsInCategory(catIds);
+		int[][] prodIdToCatId = {{1,1},{2,1},null,{3,3},null,{4,4},{5,2},{6,2},{7,3},{8,9},{9,10}}; // 9 and 10 not valid category.
+		List<Product> prods = prepProdListForTestGetProductsInCategory(prodIdToCatId);
+		List<ProductsInCat> actualCatToProd = this.service.getProductsInCategory(cats, prods);
+		Map<Integer,List<Integer>> actualCatIdToProdIdsMap = prepActualMapTestGetProductsInCategory(actualCatToProd);
+		
+		Object[][] expectedCatIdToProdIds = {{1,Arrays.asList(1,2)},{2,Arrays.asList(5,6)},{3,Arrays.asList(3,7)},{4,Arrays.asList(4)}};
+		Map<Integer,List<Integer>> expectedCatIdToProdIdsMap = prepExpectedMapTestGetProductsInCategory(expectedCatIdToProdIds);
+		assertEquals(expectedCatIdToProdIdsMap.size(), actualCatToProd.size());
+		assertEquals(expectedCatIdToProdIdsMap, actualCatIdToProdIdsMap);
+		
+	}
+	
+	@Test
+	public void testGetProductsInCategory_DuplicateCategory() {
+		int[] catIds = {1,2,3,4,4};
+		List<Category> cats = prepCatListForTestGetProductsInCategory(catIds);
+		int[][] prodIdToCatId = {{1,1},{2,1},null,{3,3},null,{4,4},{5,2},{6,2},{7,3}};
+		List<Product> prods = prepProdListForTestGetProductsInCategory(prodIdToCatId);
+		List<ProductsInCat> actualCatToProd = this.service.getProductsInCategory(cats, prods);
+		Map<Integer,List<Integer>> actualCatIdToProdIdsMap = prepActualMapTestGetProductsInCategory(actualCatToProd);
+		
+		Object[][] expectedCatIdToProdIds = {{1,Arrays.asList(1,2)},{2,Arrays.asList(5,6)},{3,Arrays.asList(3,7)},{4,Arrays.asList(4)}};
+		Map<Integer,List<Integer>> expectedCatIdToProdIdsMap = prepExpectedMapTestGetProductsInCategory(expectedCatIdToProdIds);
+		assertEquals(expectedCatIdToProdIdsMap.size(), actualCatToProd.size());
+		assertEquals(expectedCatIdToProdIdsMap, actualCatIdToProdIdsMap);
+		
+	}
+	
+	@Test
+	public void testGetProductsInCategory_DuplicateProducts() {
+		int[] catIds = {1,2,3,4};
+		List<Category> cats = prepCatListForTestGetProductsInCategory(catIds);
+		int[][] prodIdToCatId = {{1,1},{2,1},null,{3,3},null,{4,4},{5,2},{6,2},{7,3},{7,3},{3,3}};
+		List<Product> prods = prepProdListForTestGetProductsInCategory(prodIdToCatId);
+		List<ProductsInCat> actualCatToProd = this.service.getProductsInCategory(cats, prods);
+		Map<Integer,List<Integer>> actualCatIdToProdIdsMap = prepActualMapTestGetProductsInCategory(actualCatToProd);
+		
+		Object[][] expectedCatIdToProdIds = {{1,Arrays.asList(1,2)},{2,Arrays.asList(5,6)},{3,Arrays.asList(3,7)},{4,Arrays.asList(4)}};
+		Map<Integer,List<Integer>> expectedCatIdToProdIdsMap = prepExpectedMapTestGetProductsInCategory(expectedCatIdToProdIds);
+		assertEquals(expectedCatIdToProdIdsMap.size(), actualCatToProd.size());
+		assertEquals(expectedCatIdToProdIdsMap, actualCatIdToProdIdsMap);
+		
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetProductsInCategory_NullCatList() {
+		int[][] prodIdToCatId = {{1,1},{2,1},null,{3,3},null,{4,4},{5,2},{6,2},{7,3},{7,3},{3,3}};
+		List<Product> prods = prepProdListForTestGetProductsInCategory(prodIdToCatId);
+		this.service.getProductsInCategory(null, prods);
+		
+	}
+	
+	@Test(expected = IllegalArgumentException.class)
+	public void testGetProductsInCategory_NullProdList() {
+		this.service.getProductsInCategory(null, null);
+	}
+	
+	private List<Category> prepCatListForTestGetProductsInCategory(int[] catIds) {
+		List<Category> cats = new ArrayList<Category>();
+		for(int cat : catIds) {
+			cats.add(new Category(cat, null, null));
+		}
+		return cats;
+	}
+	
+	private List<Product> prepProdListForTestGetProductsInCategory(int[][] prodIds) {
+		List<Product> prods = new ArrayList<Product>();
+		for(int[] prodId : prodIds) {
+			if(prodId != null) prods.add(new Product(prodId[0], null, 0, prodId[1], null, 0.0, 0,0,0,true));
+			else prods.add(null);
+		}
+		return prods;
+	}
+	
+	private Map<Integer,List<Integer>> prepActualMapTestGetProductsInCategory(List<ProductsInCat> catToProds) {
+		Map<Integer,List<Integer>> catToProdsMap = new HashMap<>();
+		for(ProductsInCat ele : catToProds) {
+			catToProdsMap.put(ele.getCategory().getCategoryId(), new ArrayList<Integer>());
+			for(Product prod : ele.getProducts()) {
+				catToProdsMap.get(ele.getCategory().getCategoryId()).add(prod.getProductId());
+			}
+		}
+		return catToProdsMap;
+	}
+	
+	@SuppressWarnings("unchecked")
+	private Map<Integer,List<Integer>> prepExpectedMapTestGetProductsInCategory(Object[][] catToProds) {
+		Map<Integer,List<Integer>> catToProdsMap = new HashMap<>();
+		for(Object[] ele : catToProds) {
+			catToProdsMap.put((int)ele[0],(List<Integer>)ele[1]);
+		}
+		return catToProdsMap;
+	}
+	
+	/*----------------------------------------------------------------*/
 	
 	@Test
 	public void testGetProductsInSupplier_PositiveScenario() {

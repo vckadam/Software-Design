@@ -13,10 +13,12 @@ import com.vckadam.oopdesign.NorthWind.model.Category;
 public class CategoryDaoImpl implements CategoryDao {
 
 	Map<String,Category> categoryMap;
+	List<Category> categoryList;
 	private static final String FILENAME = "C:\\Users\\kadam\\workspace\\SoftwareDesign\\src\\com\\vckadam\\oopdesign\\NorthWind\\dao\\category\\categorytext";
 	
 	public CategoryDaoImpl() throws IOException {
 		this.categoryMap = new HashMap<String,Category>();
+		this.categoryList = new ArrayList<Category>();
 		loadMap();
 	}
 	
@@ -45,6 +47,7 @@ public class CategoryDaoImpl implements CategoryDao {
 	    			strA[1].substring(1,strA[1].length()-1),
 	    			strA[2].substring(1,strA[2].length()-1));		
 	    	this.categoryMap.put(category.getCategoryName(), category);
+	    	this.categoryList.add(category);
 	    }
 	    /*for(String key : this.categoryMap.keySet()) {
 	    	System.out.println(this.categoryMap.get(key).toString());
@@ -52,6 +55,11 @@ public class CategoryDaoImpl implements CategoryDao {
 	    /*for(Customer cust: this.customerList) {
 	    	System.out.println(cust.toString());
 	    }*/
+	}
+
+	@Override
+	public List<Category> getAllCategories() {
+		return this.categoryList;
 	}
 
 }
