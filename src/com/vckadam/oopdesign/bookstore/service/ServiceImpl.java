@@ -1,6 +1,7 @@
 package com.vckadam.oopdesign.bookstore.service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -55,39 +56,46 @@ public class ServiceImpl implements Service{
 	public List<OrdersByLoc> getOrdersByLocation(List<LocsByBook> booksByLoc, List<BookOrder> orders) {
 		if(booksByLoc == null || orders == null)
 			throw new IllegalArgumentException("Illegal Argument");
+		
 		List<OrdersByLoc> ordersByLocList = new ArrayList<OrdersByLoc>();
 		if(booksByLoc.size() == 0 || orders.size() == 0) 
 			return ordersByLocList;
+		
 		Map<String,OrdersByLoc> ordersByLocMap = new HashMap<>();
 		Map<Long,List<BookOrder>> bookIdToOrdersMap = new HashMap<>();
 		Map<Long,List<BookLocation>> bookIdToLocsMap = new HashMap<>(); 
 		List<LocsByBook> tempBooksByLoc = new ArrayList<>(booksByLoc);
 		List<BookOrder> tempOrders = new ArrayList<>(orders);
+		
 		for(LocsByBook ele : tempBooksByLoc) {
 			if(ele != null) {
-				if(!bookIdToLocsMap.containsKey(ele.getBook().getBookId()))
-					bookIdToLocsMap.put(ele.getBook().getBookId(), new ArrayList<BookLocation>());
-				bookIdToLocsMap.get(ele.getBook().getBookId()).addAll(ele.getBookLocs());
+				List<BookLocation> currLocs;
+				if((currLocs = ele.getBookLocs()) != null) {
+					for(BookLocation currLoc : currLocs) {
+						if(currLoc != null) {
+							putInMap(bookIdToLocsMap,ele.getBook().getBookId(),currLoc);
+						}
+					}
+				}
 			}
 		}
+		
 		for(BookOrder order : tempOrders) {
 			if(order != null) {
-				if(!bookIdToOrdersMap.containsKey(order.getBookId()))
-					bookIdToOrdersMap.put(order.getBookId(), new ArrayList<BookOrder>());
-				bookIdToOrdersMap.get(order.getBookId()).add(order);
+				putInMap(bookIdToOrdersMap, order.getBookId(),order);
 			}
 		}
+		
 		for(Long bookId : bookIdToOrdersMap.keySet()) {
 			List<BookOrder> bookOrders = bookIdToOrdersMap.get(bookId);
 			if(bookOrders != null) {
+				Collections.sort(bookOrders,(a,b)->(a.getQuantity() <= b.getQuantity())?-1:1);
 				List<BookLocation> bookLocs = bookIdToLocsMap.get(bookId);
 				if(bookLocs != null) {
 					TreeMap<Long,List<BookLocation>> stocksInLoc = new TreeMap<>();
 					for(BookLocation ele : bookLocs) {
 						if(ele != null) {
-							if(!stocksInLoc.containsKey(ele.getStock())) 
-								stocksInLoc.put(ele.getStock(), new ArrayList<BookLocation>());
-							stocksInLoc.get(ele.getStock()).add(ele);
+							putInMap(stocksInLoc, ele.getStock(), ele);
 						}
 					}
 					for(BookOrder currOrd : bookOrders) {
@@ -103,23 +111,21 @@ public class ServiceImpl implements Service{
 										ordersByLocMap.put(currKey, new OrdersByLoc(currLoc, new ArrayList<BookOrder>()));
 									ordersByLocMap.get(currKey).getOrders().add(currOrd);
 									Long extra = currLoc.getStock()-currOrd.getQuantity();
-									currLoc.setStock(currLoc.getStock()-currOrd.getQuantity());
+									currLoc.setStock(extra);
 									currLocList.remove(listSize-1);
 									if(currLocList.size() == 0)
 										stocksInLoc.remove(currLocKey);
 									if(extra > 0)  {
-										if(!stocksInLoc.containsKey(extra))
-											stocksInLoc.put(extra, new ArrayList<BookLocation>());
-										stocksInLoc.get(extra).add(currLoc);
+										putInMap(stocksInLoc, extra, currLoc);
 									}
 								}
 							}
 						}
 					}
 				}
-				
 			}
 		}
+		
 		for(String ele : ordersByLocMap.keySet()) {
 			OrdersByLoc currEle;
 			if(ele != null && (currEle=ordersByLocMap.get(ele)).getOrders().size() > 0) {
@@ -127,6 +133,14 @@ public class ServiceImpl implements Service{
 			}
 		}
 		return ordersByLocList;
+	}
+	
+	private <K,V> void putInMap(Map<K,List<V>> map, K key, V val) {
+		if(map != null) {
+			if(!map.containsKey(key)) 
+				map.put(key, new ArrayList<V>());
+			map.get(key).add(val);
+		}
 	}
 
 }
